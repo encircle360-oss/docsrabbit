@@ -28,7 +28,7 @@ public class RenderTest extends AbstractTest {
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
 
-        post("/render", request, status().isCreated());
+        post("/render", request, status().isOk());
     }
 
     private String getTemplate() throws Exception {
@@ -39,7 +39,7 @@ public class RenderTest extends AbstractTest {
             .locale("de")
             .build();
 
-        MvcResult result = post("/templates", createUpdateTemplateDTO, status().isOk());
+        MvcResult result = post("/templates", createUpdateTemplateDTO, status().isCreated());
 
         TemplateDTO templateDTO = resultToObject(result, TemplateDTO.class);
         return templateDTO.getId();
