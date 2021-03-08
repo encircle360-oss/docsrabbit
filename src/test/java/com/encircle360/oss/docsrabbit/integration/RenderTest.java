@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.encircle360.oss.docsrabbit.AbstractTest;
 import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
+import com.encircle360.oss.docsrabbit.dto.render.InlineRenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderFormatDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderResultDTO;
@@ -20,13 +21,14 @@ import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
 import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 @SpringBootTest
 @ActiveProfiles(MongoDbConfig.PROFILE)
 public class RenderTest extends AbstractTest {
 
     @Test
-    public void renderTest() throws Exception {
+    public void render_test() throws Exception {
         RenderRequestDTO request = RenderRequestDTO.builder().build();
 
         post("/render", request, status().isBadRequest());
@@ -51,6 +53,30 @@ public class RenderTest extends AbstractTest {
         MvcResult exceptionResult = post("/render", request, status().isInternalServerError());
         String exception = exceptionResult.getResponse().getContentAsString();
         Assertions.assertNotNull(exception);
+    }
+
+    @Test
+    public void render_inline_test() throws Exception {
+        InlineRenderRequestDTO inlineRenderRequestDTO = InlineRenderRequestDTO.builder().build();
+        post("/render", inlineRenderRequestDTO, status().isBadRequest());
+        post("/render/inline", inlineRenderRequestDTO, status().isBadRequest());
+
+        HashMap<String, JsonNode> model = new HashMap<>();
+        model.put("test", TextNode.valueOf("yeaha!"));
+
+        inlineRenderRequestDTO = InlineRenderRequestDTO
+            .builder()
+            .template("test ${test}")
+            .format(RenderFormatDTO.HTML)
+            .model(model)
+            .locale("de")
+            .build();
+
+        MvcResult renderResult = post("/render/inline", inlineRenderRequestDTO, status().isOk());
+        RenderResultDTO renderResultDTO = resultToObject(renderResult, RenderResultDTO.class);
+        Assertions.assertNotNull(renderResultDTO);
+        Assertions.assertNotNull(renderResultDTO.getBase64());
+        Assertions.assertNotEquals("",renderResultDTO.getBase64());
     }
 
     private String getTemplate() throws Exception {
