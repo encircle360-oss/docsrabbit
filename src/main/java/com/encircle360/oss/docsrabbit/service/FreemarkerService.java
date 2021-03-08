@@ -2,6 +2,7 @@ package com.encircle360.oss.docsrabbit.service;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -39,7 +40,7 @@ public class FreemarkerService {
     private final ServletContext context;
 
     public String parseTemplateFromString(String templateContent, String locale, HashMap<String, JsonNode> model) throws IOException, TemplateException {
-        if(templateContent == null) {
+        if (templateContent == null) {
             return null;
         }
 

@@ -1,6 +1,7 @@
 package com.encircle360.oss.docsrabbit.controller;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import javax.validation.Valid;
@@ -8,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,10 +55,13 @@ public class RenderController {
 
         // todo catch errors and deliver codes
         String processed = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
-        byte[] pdfBytes = pdfService.generatePDFDocument(processed);
-        String base64 = base64Encoder.encodeToString(pdfBytes);
 
-        RenderResultDTO renderResultDTO = mapper.mapFromRequest(renderRequestDTO, base64, pdfBytes.length);
+        String base64 = switch (renderRequestDTO.getFormat()) {
+            case PDF -> pdfService.generateBase64PDFDocument(processed);
+            case HTML, TEXT -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
+        };
+
+        RenderResultDTO renderResultDTO = mapper.mapFromRequest(renderRequestDTO, base64, base64.getBytes().length);
         return ResponseEntity.status(HttpStatus.OK).body(renderResultDTO);
     }
 

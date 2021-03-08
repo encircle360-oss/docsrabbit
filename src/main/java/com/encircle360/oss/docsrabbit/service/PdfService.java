@@ -3,6 +3,7 @@ package com.encircle360.oss.docsrabbit.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 @Service
 public class PdfService {
 
+    private final static Base64.Encoder base64Encoder = Base64.getEncoder();
+
     public static Boolean isRunningInsideDocker() {
         try (Stream<String> stream =
             Files.lines(Paths.get("/proc/1/cgroup"))) {
@@ -25,6 +28,10 @@ public class PdfService {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public String generateBase64PDFDocument(String htmlContent) throws IOException, InterruptedException{
+        return base64Encoder.encodeToString(generatePDFDocument(htmlContent));
     }
 
     public byte[] generatePDFDocument(String htmlContent) throws IOException, InterruptedException {
