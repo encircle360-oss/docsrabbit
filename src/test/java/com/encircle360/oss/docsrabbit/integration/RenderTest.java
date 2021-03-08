@@ -20,7 +20,6 @@ import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
 import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 
 @SpringBootTest
 @ActiveProfiles(MongoDbConfig.PROFILE)

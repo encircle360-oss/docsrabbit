@@ -1,4 +1,4 @@
-package com.encircle360.oss.docsrabbit.service;
+package com.encircle360.oss.docsrabbit.service.template;
 
 import java.util.List;
 

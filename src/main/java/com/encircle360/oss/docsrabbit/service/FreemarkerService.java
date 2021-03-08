@@ -2,7 +2,6 @@ package com.encircle360.oss.docsrabbit.service;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Locale;
 

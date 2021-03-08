@@ -22,7 +22,8 @@ import com.encircle360.oss.docsrabbit.mapper.RenderMapper;
 import com.encircle360.oss.docsrabbit.model.Template;
 import com.encircle360.oss.docsrabbit.service.FreemarkerService;
 import com.encircle360.oss.docsrabbit.service.PdfService;
-import com.encircle360.oss.docsrabbit.service.TemplateService;
+import com.encircle360.oss.docsrabbit.service.template.TemplateLoader;
+import com.encircle360.oss.docsrabbit.service.template.TemplateService;
 
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +37,7 @@ public class RenderController {
 
     private final PdfService pdfService;
 
-    private final TemplateService templateService;
+    private final TemplateLoader templateLoader;
 
     private final FreemarkerService freemarkerService;
 
@@ -47,7 +48,7 @@ public class RenderController {
     @Operation(operationId = "render", description = "Renders the given")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RenderResultDTO> render(@RequestBody @Valid RenderRequestDTO renderRequestDTO) throws IOException, TemplateException, InterruptedException {
-        Template template = templateService.get(renderRequestDTO.getTemplateId());
+        Template template = templateLoader.loadTemplate(renderRequestDTO.getTemplateId());
 
         if (template == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

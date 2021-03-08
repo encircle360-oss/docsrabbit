@@ -29,7 +29,7 @@ import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
 import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
 import com.encircle360.oss.docsrabbit.mapper.TemplateMapper;
 import com.encircle360.oss.docsrabbit.model.Template;
-import com.encircle360.oss.docsrabbit.service.TemplateService;
+import com.encircle360.oss.docsrabbit.service.template.TemplateService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
