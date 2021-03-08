@@ -28,7 +28,7 @@ public class RenderTest extends AbstractTest {
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
 
-        post("/render", request, status().isInternalServerError());
+        post("/render", request, status().isCreated());
     }
 
     private String getTemplate() throws Exception {
