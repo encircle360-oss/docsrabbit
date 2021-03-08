@@ -5,9 +5,28 @@
 To run an instance with default configuration and without database support just run:
 
 ````
-docker run -p 50005:50005 -p 50006:50006\
+docker run -p 50005:50005 -p 50006:50006 \
     registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
 ````
+
+For database support with mongodb please use this command
+
+````
+docker run -p 50005:50005 -p 50006:50006 \
+    --env SPRING_PROFILES_ACTIVE=mongo \
+    --env MONGO_URI=mongodb://localhost:27017/docsrabbit \
+    --env MONGO_DATABASE=docsrabbit \
+    registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
+````
+
+### Features of docsrabbit
+
+* Using templates from filesystem
+* Using templates out of mongodb (activate mongo profile)
+* Internationalization 
+* Inline rendering (you can post the template directly to render)
+* Multiple rendering types: PDF, PLAIN, HTML
+* Base64 encoded transfer of data 
 
 For all available endpoints visit
 
