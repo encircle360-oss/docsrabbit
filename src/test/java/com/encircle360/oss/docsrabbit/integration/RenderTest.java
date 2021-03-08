@@ -43,10 +43,14 @@ public class RenderTest extends AbstractTest {
         RenderResultDTO renderResult = resultToObject(renderMvcResult, RenderResultDTO.class);
         String content = new String(Base64.getDecoder().decode(renderResult.getBase64()));
         Assertions.assertEquals("asdsd 0,4", content);
+        Assertions.assertEquals("text/html", renderResult.getMimeType());
 
         model = new HashMap<>();
         request.setModel(model);
-        post("/render", request, status().isInternalServerError());
+
+        MvcResult exceptionResult = post("/render", request, status().isInternalServerError());
+        String exception = exceptionResult.getResponse().getContentAsString();
+        Assertions.assertNotNull(exception);
     }
 
     private String getTemplate() throws Exception {

@@ -23,7 +23,6 @@ import com.encircle360.oss.docsrabbit.model.Template;
 import com.encircle360.oss.docsrabbit.service.FreemarkerService;
 import com.encircle360.oss.docsrabbit.service.PdfService;
 import com.encircle360.oss.docsrabbit.service.template.TemplateLoader;
-import com.encircle360.oss.docsrabbit.service.template.TemplateService;
 
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +46,7 @@ public class RenderController {
 
     @Operation(operationId = "render", description = "Renders the given")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RenderResultDTO> render(@RequestBody @Valid RenderRequestDTO renderRequestDTO) throws IOException, TemplateException, InterruptedException {
+    public ResponseEntity<RenderResultDTO> render(@RequestBody @Valid RenderRequestDTO renderRequestDTO) throws Exception {
         Template template = templateLoader.loadTemplate(renderRequestDTO.getTemplateId());
 
         if (template == null) {
@@ -56,10 +55,12 @@ public class RenderController {
 
         // todo catch errors and deliver codes
         String processed = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
+        String processedPlain = freemarkerService.parseTemplateFromString(template.getPlain(), template.getLocale(), renderRequestDTO.getModel());
 
         String base64 = switch (renderRequestDTO.getFormat()) {
             case PDF -> pdfService.generateBase64PDFDocument(processed);
-            case HTML, TEXT -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
+            case HTML -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
+            case TEXT -> base64Encoder.encodeToString(processedPlain.getBytes(StandardCharsets.UTF_8));
         };
 
         RenderResultDTO renderResultDTO = mapper.mapFromRequest(renderRequestDTO, base64, base64.getBytes().length);

@@ -8,7 +8,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
-import com.encircle360.oss.docsrabbit.dto.template.RenderedTemplateDTO;
 import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
 import com.encircle360.oss.docsrabbit.model.Template;
 
@@ -26,8 +25,4 @@ public interface TemplateMapper {
 
     @Mapping(ignore = true, target = "id")
     void updateFromDto(CreateUpdateTemplateDTO createUpdateTemplateDTO, @MappingTarget Template template);
-
-    @Mapping(target = "html", source = "renderedHtml")
-    @Mapping(target = "plain", source = "renderedPlain")
-    RenderedTemplateDTO toRendered(Template template, String renderedHtml, String renderedPlain);
 }
