@@ -1,1 +1,3 @@
-
+docsrabbit:
+  pdf:
+    default-template: default.ftlh

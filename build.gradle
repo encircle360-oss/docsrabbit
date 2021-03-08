@@ -29,6 +29,15 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'com.github.jhonnymertz:java-wkhtmltopdf-wrapper:1.1.12-RELEASE'
     compile 'no.api.freemarker:freemarker-java8:1.3.0'
+
+    compile 'org.mapstruct:mapstruct:1.3.1.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.3.1.Final"
+
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.4.2'
 }
 
 test {
