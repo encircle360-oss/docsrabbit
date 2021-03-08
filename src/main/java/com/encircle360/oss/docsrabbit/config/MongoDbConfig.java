@@ -15,8 +15,8 @@ import com.mongodb.MongoCredential;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@Profile({MongoDbConfig.PROFILE})
 @RequiredArgsConstructor
+@Profile(MongoDbConfig.PROFILE)
 @EnableConfigurationProperties(MongoProperties.class)
 @EnableMongoRepositories("com.encircle360.oss.docsrabbit.repository")
 public class MongoDbConfig extends AbstractMongoClientConfiguration {

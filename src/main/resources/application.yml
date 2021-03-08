@@ -1,3 +1,8 @@
 docsrabbit:
   pdf:
     default-template: default.ftlh
+spring:
+  data:
+    mongodb:
+      database: ${MONGO_DATABASE:docsrabbit}
+      uri: ${MONGO_URI:mongodb://localhost:27017/docsrabbit}

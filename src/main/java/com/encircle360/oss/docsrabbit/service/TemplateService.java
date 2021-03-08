@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Profile(MongoDbConfig.PROFILE)
 public class TemplateService {
+
     private final TemplateRepository templateRepository;
 
     public Page<Template> findAll(Pageable pageable) {
