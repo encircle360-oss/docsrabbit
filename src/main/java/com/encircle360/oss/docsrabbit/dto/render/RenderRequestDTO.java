@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Schema(name = "RenderRequest", description = "Render Request ")
+@Schema(name = "RenderRequest", description = "Render Request for a template in file system or database")
 public class RenderRequestDTO extends AbstractRenderRequestDTO {
 
     @NotBlank
