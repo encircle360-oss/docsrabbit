@@ -47,7 +47,7 @@ Since docsrabbit will lookup for templates in `/resources/templates/` and i18n f
 You can find examples how [templates](src/main/resources/templates) or [i18n files](src/main/resources/i18n) look like [here](src/main/resources).
 ```
 FROM registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
-ADD templates /resources/templates # add your template directory containing *.ftl templates here
+ADD templates /resources/templates # add your template directory containing *.ftlh templates here
 ADD i18n /resources/i18n # add your i18n directory containing messages.properties files here
 ```
 
@@ -55,7 +55,7 @@ If you're done with this you can build your own image using docker-cli `docker b
 E.g. we suggest to use gitlab-ci to always have your own customized docsrabbit docker image.
 
 After you've build your own docker image with your own templates you can use the REST api to render documents.
-The `templateId` field corresponds to the template filename. If you've added a template called `invoice.ftl` you have to use
+The `templateId` field corresponds to the template filename. If you've added a template called `invoice.ftlh` you have to use
 `"invoice"`
 within your API request payload.
 
