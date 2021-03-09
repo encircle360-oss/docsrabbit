@@ -40,7 +40,6 @@ public class PdfService {
         // TODO split htmlContent to pages
         // maybe use of https://stackoverflow.com/questions/1664049/can-i-force-a-page-break-in-html-printing
         pdf.addPageFromString(htmlContent);
-        pdf.addToc();
 
         return pdf.getPDF();
     }
