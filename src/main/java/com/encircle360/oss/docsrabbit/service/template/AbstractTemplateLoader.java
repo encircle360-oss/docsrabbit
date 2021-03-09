@@ -1,6 +1,9 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -21,6 +24,16 @@ public abstract class AbstractTemplateLoader implements TemplateLoader {
                 log.error(e.getMessage());
             }
         }
+
+        Path filePath = Paths.get("/resources/templates" + path);
+        if (Files.exists(filePath)) {
+            try {
+                return Files.readString(filePath);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+
         return null;
     }
 
@@ -29,7 +42,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader {
         String plainTemplateContent = getFileContent(templateId + "_plain.ftlh");
         String subjectTemplateContent = getFileContent(templateId + "_subject.ftlh");
 
-        if(baseTemplateContent == null && plainTemplateContent == null) {
+        if (baseTemplateContent == null && plainTemplateContent == null) {
             return null;
         }
 
