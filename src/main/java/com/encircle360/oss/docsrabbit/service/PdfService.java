@@ -30,7 +30,7 @@ public class PdfService {
         }
     }
 
-    public String generateBase64PDFDocument(String htmlContent) throws IOException, InterruptedException{
+    public String generateBase64PDFDocument(String htmlContent) throws IOException, InterruptedException {
         return base64Encoder.encodeToString(generatePDFDocument(htmlContent));
     }
 
@@ -40,8 +40,10 @@ public class PdfService {
         // TODO split htmlContent to pages
         // maybe use of https://stackoverflow.com/questions/1664049/can-i-force-a-page-break-in-html-printing
         pdf.addPageFromString(htmlContent);
+        byte[] pdfBytes = pdf.getPDF();
+        pdf.cleanAllTempFiles();
 
-        return pdf.getPDF();
+        return pdfBytes;
     }
 
     private WrapperConfig getWkhtmlToPdfWrapperConfig() {
