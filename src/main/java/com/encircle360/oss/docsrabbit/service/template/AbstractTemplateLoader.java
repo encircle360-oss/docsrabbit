@@ -25,7 +25,7 @@ public abstract class AbstractTemplateLoader implements TemplateLoader {
             }
         }
 
-        Path filePath = Paths.get("/resources/templates" + path);
+        Path filePath = Paths.get("/resources/templates/" + path);
         if (Files.exists(filePath)) {
             try {
                 return Files.readString(filePath);
