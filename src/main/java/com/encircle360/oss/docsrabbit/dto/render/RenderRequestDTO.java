@@ -21,4 +21,7 @@ public class RenderRequestDTO extends AbstractRenderRequestDTO {
     @Schema(name = "templateId", description = "Id of the template, that should be used for rendering")
     private String templateId;
 
+    @Schema(name = "locale", description = "The locale which should be used for rendering, only needed when using filesystem", example = "de")
+    private String locale;
+
 }

@@ -54,7 +54,10 @@ public class RenderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // todo catch errors and deliver codes
+        if(renderRequestDTO.getLocale() != null) {
+            template.setLocale(renderRequestDTO.getLocale());
+        }
+
         String processed = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
         String processedPlain = freemarkerService.parseTemplateFromString(template.getPlain(), template.getLocale(), renderRequestDTO.getModel());
 
