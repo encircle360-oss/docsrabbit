@@ -21,8 +21,10 @@ public interface TemplateMapper {
     List<TemplateDTO> toDtos(List<Template> template);
 
     @Mapping(ignore = true, target = "id")
+    @Mapping(target = "lastUpdate", expression = "java(java.time.LocalDateTime.now())")
     Template createFromDto(CreateUpdateTemplateDTO createUpdateTemplateDTO);
 
     @Mapping(ignore = true, target = "id")
+    @Mapping(target = "lastUpdate", expression = "java(java.time.LocalDateTime.now())")
     void updateFromDto(CreateUpdateTemplateDTO createUpdateTemplateDTO, @MappingTarget Template template);
 }

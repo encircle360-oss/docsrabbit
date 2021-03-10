@@ -1,5 +1,8 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
+import java.io.IOException;
+import java.io.Reader;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
