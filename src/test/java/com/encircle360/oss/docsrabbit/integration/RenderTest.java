@@ -36,7 +36,7 @@ public class RenderTest extends AbstractTest {
         HashMap<String, JsonNode> model = new HashMap<>();
         model.put("testvar", DoubleNode.valueOf(0.4));
 
-        String templateId = getTemplate();
+        String templateId = getTemplate("test","asdsd ${testvar}");
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
         request.setModel(model);
@@ -61,12 +61,18 @@ public class RenderTest extends AbstractTest {
         model.put("testvar", DoubleNode.valueOf(0.4));
         RenderRequestDTO request = RenderRequestDTO.builder().build();
 
-        String templateId = getTemplate();
+        String templateId = getTemplate("includer","<#include \"included.ftlh\"/>");
+        getTemplate("included","asdasd");
+
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
         request.setModel(model);
 
         MvcResult renderMvcResult = post("/render", request, status().isOk());
+
+        RenderResultDTO renderResult = resultToObject(renderMvcResult, RenderResultDTO.class);
+        String content = new String(Base64.getDecoder().decode(renderResult.getBase64()));
+        Assertions.assertEquals("asdasd", content);
     }
 
     @Test
@@ -93,17 +99,18 @@ public class RenderTest extends AbstractTest {
         Assertions.assertNotEquals("",renderResultDTO.getBase64());
     }
 
-    private String getTemplate() throws Exception {
+    private String getTemplate(String name, String content) throws Exception {
         CreateUpdateTemplateDTO createUpdateTemplateDTO = CreateUpdateTemplateDTO
             .builder()
-            .html("asdsd ${testvar}")
-            .name("test")
+            .html(content)
+            .name(name)
             .locale("de")
             .build();
 
         MvcResult result = post("/templates", createUpdateTemplateDTO, status().isCreated());
 
         TemplateDTO templateDTO = resultToObject(result, TemplateDTO.class);
+        Assertions.assertNotNull(templateDTO.getLastUpdate());
         return templateDTO.getId();
     }
 }

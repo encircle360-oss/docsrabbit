@@ -1,5 +1,7 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
+import java.io.IOException;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +29,15 @@ public class MongoDbTemplateLoader extends AbstractTemplateLoader {
         }
         return template;
     }
+
+    @Override
+    public Object findTemplateSource(String name) throws IOException {
+        if (name.endsWith(".ftlh") || name.endsWith(".ftl")) {
+            name = name.replace(".ftlh", "").replace(".ftl", "");
+        }
+
+        Template template = templateService.getByName(name);
+        return template == null ? loadTemplate(name) : template;
+    }
+
 }

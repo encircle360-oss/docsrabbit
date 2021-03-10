@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.support.RequestContext;
 
+import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
 import com.encircle360.oss.docsrabbit.util.FakeLocaleHttpServletRequest;
 import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,6 +42,8 @@ public class FreemarkerService {
 
     private final ServletContext context;
 
+    private final DocsRabbitTemplateLoader docsRabbitTemplateLoader;
+
     public String parseTemplateFromString(String templateContent, String locale, HashMap<String, JsonNode> model) throws IOException, TemplateException {
         if (templateContent == null) {
             return null;
@@ -52,11 +55,9 @@ public class FreemarkerService {
             locale = DEFAULT_LOCALE;
         }
 
-        // Todo implement db loader
-        TemplateLoader fileSysTemplateLoader = new ClassTemplateLoader(getClass(), "/resources/templates");
         TemplateLoader defaultLoader = freemarkerConfiguration.getTemplateLoader();
 
-        freemarkerConfiguration.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[] {fileSysTemplateLoader, defaultLoader}));
+        freemarkerConfiguration.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[] {docsRabbitTemplateLoader, defaultLoader}));
         freemarkerConfiguration.setObjectWrapper(jsonNodeObjectWrapper);
 
         Template template = new Template("pdf", new StringReader(templateContent), freemarkerConfiguration);

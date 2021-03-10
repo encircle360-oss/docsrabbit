@@ -42,4 +42,8 @@ public class TemplateService {
         }
         return templateRepository.findAllByTagsContains(tags, pageable);
     }
+
+    public Template getByName(String name) {
+        return templateRepository.findFirstByName(name);
+    }
 }

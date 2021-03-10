@@ -1,5 +1,6 @@
 package com.encircle360.oss.docsrabbit.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -20,15 +21,13 @@ public class Template {
     @Id
     private String id;
 
-    private String subject;
-
     private String name;
 
     private String html;
 
-    private String plain;
-
     private String locale;
 
     private List<String> tags;
+
+    private LocalDateTime lastUpdate;
 }

@@ -23,7 +23,7 @@ import com.encircle360.oss.docsrabbit.mapper.RenderMapper;
 import com.encircle360.oss.docsrabbit.model.Template;
 import com.encircle360.oss.docsrabbit.service.FreemarkerService;
 import com.encircle360.oss.docsrabbit.service.PdfService;
-import com.encircle360.oss.docsrabbit.service.template.TemplateLoader;
+import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
 
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class RenderController {
 
     private final PdfService pdfService;
 
-    private final TemplateLoader templateLoader;
+    private final DocsRabbitTemplateLoader templateLoader;
 
     private final FreemarkerService freemarkerService;
 
@@ -59,12 +59,11 @@ public class RenderController {
         }
 
         String processed = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
-        String processedPlain = freemarkerService.parseTemplateFromString(template.getPlain(), template.getLocale(), renderRequestDTO.getModel());
 
         String base64 = switch (renderRequestDTO.getFormat()) {
             case PDF -> pdfService.generateBase64PDFDocument(processed);
             case HTML -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
-            case TEXT -> base64Encoder.encodeToString(processedPlain.getBytes(StandardCharsets.UTF_8));
+            case TEXT -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
         };
 
         RenderResultDTO renderResultDTO = mapper.mapFromRequest(renderRequestDTO, base64, base64.getBytes().length);

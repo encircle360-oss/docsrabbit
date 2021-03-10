@@ -1,9 +1,12 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.ZoneOffset;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -13,7 +16,7 @@ import com.encircle360.oss.docsrabbit.model.Template;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class AbstractTemplateLoader implements TemplateLoader {
+public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader {
 
     protected String getFileContent(String path) {
         Resource resource = new ClassPathResource("templates/" + path);
@@ -39,10 +42,8 @@ public abstract class AbstractTemplateLoader implements TemplateLoader {
 
     protected Template loadFromFiles(String templateId) {
         String baseTemplateContent = getFileContent(templateId + ".ftlh");
-        String plainTemplateContent = getFileContent(templateId + "_plain.ftlh");
-        String subjectTemplateContent = getFileContent(templateId + "_subject.ftlh");
 
-        if (baseTemplateContent == null && plainTemplateContent == null) {
+        if (baseTemplateContent == null) {
             return null;
         }
 
@@ -50,9 +51,32 @@ public abstract class AbstractTemplateLoader implements TemplateLoader {
             .builder()
             .id(templateId)
             .name(templateId)
-            .subject(subjectTemplateContent)
-            .plain(plainTemplateContent)
             .html(baseTemplateContent)
             .build();
     }
+
+    @Override
+    public Object findTemplateSource(String name) throws IOException {
+        return loadTemplate(name);
+    }
+
+    @Override
+    public long getLastModified(Object templateSource) {
+        if (templateSource instanceof Template && ((Template) templateSource).getLastUpdate() != null) {
+            return ((Template) templateSource).getLastUpdate().atZone(ZoneOffset.systemDefault()).toInstant().toEpochMilli();
+        }
+        return 0;
+    }
+
+    @Override
+    public Reader getReader(Object templateSource, String encoding) throws IOException {
+        String content = ((Template) templateSource).getHtml();
+        return new StringReader(content);
+    }
+
+    @Override
+    public void closeTemplateSource(Object templateSource) throws IOException {
+
+    }
+
 }

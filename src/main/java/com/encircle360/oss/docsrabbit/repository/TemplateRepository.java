@@ -15,4 +15,6 @@ import com.encircle360.oss.docsrabbit.model.Template;
 @Profile(MongoDbConfig.PROFILE)
 public interface TemplateRepository extends MongoRepository<Template, String> {
     Page<Template> findAllByTagsContains(List<String> tags, Pageable pageable);
+
+    Template findFirstByName(String name);
 }
