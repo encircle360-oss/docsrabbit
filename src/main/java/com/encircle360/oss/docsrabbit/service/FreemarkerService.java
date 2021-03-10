@@ -18,6 +18,9 @@ import com.encircle360.oss.docsrabbit.util.FakeLocaleHttpServletRequest;
 import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -49,7 +52,13 @@ public class FreemarkerService {
             locale = DEFAULT_LOCALE;
         }
 
+        // Todo implement db loader
+        TemplateLoader fileSysTemplateLoader = new ClassTemplateLoader(getClass(), "/resources/templates");
+        TemplateLoader defaultLoader = freemarkerConfiguration.getTemplateLoader();
+
+        freemarkerConfiguration.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[] {fileSysTemplateLoader, defaultLoader}));
         freemarkerConfiguration.setObjectWrapper(jsonNodeObjectWrapper);
+
         Template template = new Template("pdf", new StringReader(templateContent), freemarkerConfiguration);
         return processTemplate(template, locale, modelMap);
     }

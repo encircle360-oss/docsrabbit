@@ -56,6 +56,20 @@ public class RenderTest extends AbstractTest {
     }
 
     @Test
+    public void render_include() throws Exception {
+        HashMap<String, JsonNode> model = new HashMap<>();
+        model.put("testvar", DoubleNode.valueOf(0.4));
+        RenderRequestDTO request = RenderRequestDTO.builder().build();
+
+        String templateId = getTemplate();
+        request.setFormat(RenderFormatDTO.HTML);
+        request.setTemplateId(templateId);
+        request.setModel(model);
+
+        MvcResult renderMvcResult = post("/render", request, status().isOk());
+    }
+
+    @Test
     public void render_inline_test() throws Exception {
         InlineRenderRequestDTO inlineRenderRequestDTO = InlineRenderRequestDTO.builder().build();
         post("/render", inlineRenderRequestDTO, status().isBadRequest());
