@@ -36,6 +36,7 @@ public class PdfService {
 
     public byte[] generatePDFDocument(String htmlContent) throws IOException, InterruptedException {
         Pdf pdf = new Pdf(this.getWkhtmlToPdfWrapperConfig());
+        pdf.addParam(new Param("--print-media-type"));
 
         // TODO split htmlContent to pages
         // maybe use of https://stackoverflow.com/questions/1664049/can-i-force-a-page-break-in-html-printing
@@ -52,7 +53,7 @@ public class PdfService {
         }
 
         XvfbConfig xc = new XvfbConfig();
-        xc.addParams(new Param("--auto-servernum"), new Param("--print-media-type"));
+        xc.addParams(new Param("--auto-servernum"));
         wc.setXvfbConfig(xc);
         return wc;
     }
