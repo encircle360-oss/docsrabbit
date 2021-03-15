@@ -1,17 +1,15 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
-import java.util.List;
-
+import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
+import com.encircle360.oss.docsrabbit.model.Template;
+import com.encircle360.oss.docsrabbit.repository.TemplateRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
-import com.encircle360.oss.docsrabbit.model.Template;
-import com.encircle360.oss.docsrabbit.repository.TemplateRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -15,6 +15,6 @@ public class FileTemplateLoader extends AbstractTemplateLoader {
 
     @Override
     public Template loadTemplate(String templateId) {
-        return loadFromFiles(templateId);
+        return super.loadFromFiles(templateId);
     }
 }

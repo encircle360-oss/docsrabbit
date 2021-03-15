@@ -1,4 +1,4 @@
-package com.encircle360.oss.docsrabbit.integration.xls;
+package com.encircle360.oss.docsrabbit.integration.pdf;
 
 import com.encircle360.oss.docsrabbit.AbstractTest;
 import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
@@ -6,8 +6,6 @@ import com.encircle360.oss.docsrabbit.dto.render.InlineRenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderFormatDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderResultDTO;
-import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
-import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -24,8 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles(MongoDbConfig.PROFILE)
-public class RenderXlsTest extends AbstractTest {
-
+public class DbRenderTest extends AbstractTest {
     @Test
     public void render_test() throws Exception {
         RenderRequestDTO request = RenderRequestDTO.builder().build();
@@ -35,7 +32,7 @@ public class RenderXlsTest extends AbstractTest {
         HashMap<String, JsonNode> model = new HashMap<>();
         model.put("testvar", DoubleNode.valueOf(0.4));
 
-        String templateId = getTemplate("test","asdsd ${testvar}");
+        String templateId = super.getTemplate("test","asdsd ${testvar}");
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
         request.setModel(model);
@@ -60,8 +57,8 @@ public class RenderXlsTest extends AbstractTest {
         model.put("testvar", DoubleNode.valueOf(0.4));
         RenderRequestDTO request = RenderRequestDTO.builder().build();
 
-        String templateId = getTemplate("includer","<#include \"included.ftlh\"/>");
-        getTemplate("included","asdasd");
+        String templateId = super.getTemplate("includer","<#include \"included.ftlh\"/>");
+        super.getTemplate("included","asdasd");
 
         request.setFormat(RenderFormatDTO.HTML);
         request.setTemplateId(templateId);
@@ -84,32 +81,17 @@ public class RenderXlsTest extends AbstractTest {
         model.put("test", TextNode.valueOf("yeaha!"));
 
         inlineRenderRequestDTO = InlineRenderRequestDTO
-            .builder()
-            .template("test ${test}")
-            .format(RenderFormatDTO.HTML)
-            .model(model)
-            .locale("de")
-            .build();
+                .builder()
+                .template("test ${test}")
+                .format(RenderFormatDTO.HTML)
+                .model(model)
+                .locale("de")
+                .build();
 
         MvcResult renderResult = post("/render/inline", inlineRenderRequestDTO, status().isOk());
         RenderResultDTO renderResultDTO = resultToObject(renderResult, RenderResultDTO.class);
         Assertions.assertNotNull(renderResultDTO);
         Assertions.assertNotNull(renderResultDTO.getBase64());
         Assertions.assertNotEquals("",renderResultDTO.getBase64());
-    }
-
-    private String getTemplate(String name, String content) throws Exception {
-        CreateUpdateTemplateDTO createUpdateTemplateDTO = CreateUpdateTemplateDTO
-            .builder()
-            .html(content)
-            .name(name)
-            .locale("de")
-            .build();
-
-        MvcResult result = post("/templates", createUpdateTemplateDTO, status().isCreated());
-
-        TemplateDTO templateDTO = resultToObject(result, TemplateDTO.class);
-        Assertions.assertNotNull(templateDTO.getLastUpdate());
-        return templateDTO.getId();
     }
 }

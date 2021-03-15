@@ -1,12 +1,15 @@
 package com.encircle360.oss.docsrabbit.service;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Locale;
-
-import javax.servlet.ServletContext;
-
+import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
+import com.encircle360.oss.docsrabbit.util.FakeLocaleHttpServletRequest;
+import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -14,18 +17,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.support.RequestContext;
 
-import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
-import com.encircle360.oss.docsrabbit.util.FakeLocaleHttpServletRequest;
-import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import freemarker.cache.ClassTemplateLoader;
-import freemarker.cache.MultiTemplateLoader;
-import freemarker.cache.TemplateLoader;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import lombok.RequiredArgsConstructor;
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +56,8 @@ public class FreemarkerService {
         freemarkerConfiguration.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[] {docsRabbitTemplateLoader, defaultLoader}));
         freemarkerConfiguration.setObjectWrapper(jsonNodeObjectWrapper);
 
-        Template template = new Template("pdf", new StringReader(templateContent), freemarkerConfiguration);
+        Template template = new Template("template", new StringReader(templateContent), freemarkerConfiguration);
+
         return processTemplate(template, locale, modelMap);
     }
 

@@ -1,6 +1,3 @@
-docsrabbit:
-  pdf:
-    default-template: default.ftlh
 spring:
   application:
     name: docsrabbit
@@ -8,8 +5,16 @@ spring:
     mongodb:
       database: ${MONGO_DATABASE:docsrabbit}
       uri: ${MONGO_URI:mongodb://localhost:27017/docsrabbit}
+
 server:
   port: 50005
+
 management:
   server:
-    port: 50006
+    port: 51005
+
+docsrabbit:
+  pdf:
+    default-template: default.ftlh
+  xls:
+    default-template: default.xls

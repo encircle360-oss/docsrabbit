@@ -17,7 +17,4 @@ public class InlineRenderRequestDTO extends AbstractRenderRequestDTO {
 
     @Schema(name = "template", description = "The contents of this template")
     private String template;
-
-    @Schema(name = "locale", description = "Locale of this template")
-    private String locale;
 }

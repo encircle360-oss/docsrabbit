@@ -3,11 +3,12 @@ package com.encircle360.oss.docsrabbit.controller;
 import com.encircle360.oss.docsrabbit.dto.render.InlineRenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderResultDTO;
+import com.encircle360.oss.docsrabbit.mapper.RenderFormatMapper;
 import com.encircle360.oss.docsrabbit.mapper.RenderMapper;
 import com.encircle360.oss.docsrabbit.model.Template;
-import com.encircle360.oss.docsrabbit.service.ExcelService;
 import com.encircle360.oss.docsrabbit.service.FreemarkerService;
-import com.encircle360.oss.docsrabbit.service.PdfService;
+import com.encircle360.oss.docsrabbit.service.format.ExcelService;
+import com.encircle360.oss.docsrabbit.service.format.PdfService;
 import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,11 +34,13 @@ public class RenderController {
 
     private final PdfService pdfService;
     private final ExcelService excelService;
+
     private final FreemarkerService freemarkerService;
 
     private final static Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    private final RenderMapper mapper = RenderMapper.INSTANCE;
+    private final RenderMapper renderMapper = RenderMapper.INSTANCE;
+    private final RenderFormatMapper renderFormatMapper = RenderFormatMapper.INSTANCE;
 
     @Operation(operationId = "render", description = "Renders the given template by id")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -51,24 +54,17 @@ public class RenderController {
             template.setLocale(renderRequestDTO.getLocale());
         }
 
-        String base64 = null;
-        switch (renderRequestDTO.getFormat()) {
-            case TEXT, HTML -> {
-                String processedTemplate = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
-                base64 = base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
-            }
-            case PDF -> {
-                String processedTemplate = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
-                base64 = pdfService.generateBase64PDFDocument(processedTemplate);
-            }
-            case XLS -> {
-                String processedTemplate = freemarkerService.parseTemplateFromString(template.getHtml(), template.getLocale(), renderRequestDTO.getModel());
-                base64 = excelService.generateBase64ExcelDocument(processedTemplate);
-            }
+        String processedTemplate = freemarkerService.parseTemplateFromString(template.getContent(), template.getLocale(), renderRequestDTO.getModel());
+        String base64 = switch (renderRequestDTO.getFormat()) {
+            case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
+            case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
+            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, renderRequestDTO.getContainerId(), renderRequestDTO.getModel());
+        };
+        if (base64 == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        ;
 
-        RenderResultDTO renderResultDTO = mapper.mapFromRequest(renderRequestDTO, base64, base64.getBytes().length);
+        RenderResultDTO renderResultDTO = renderMapper.mapFromRequest(renderRequestDTO, base64, base64.getBytes().length);
 
         return ResponseEntity.status(HttpStatus.OK).body(renderResultDTO);
     }
@@ -76,17 +72,15 @@ public class RenderController {
     @Operation(operationId = "renderInline", description = "Renders the given inline template")
     @PostMapping(value = "/inline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RenderResultDTO> renderInline(@RequestBody @Valid InlineRenderRequestDTO inlineRenderRequestDTO) throws Exception {
-        String processed = freemarkerService.parseTemplateFromString(inlineRenderRequestDTO.getTemplate(), inlineRenderRequestDTO.getLocale(), inlineRenderRequestDTO.getModel());
-        String processedPlain = freemarkerService.parseTemplateFromString(inlineRenderRequestDTO.getTemplate(), inlineRenderRequestDTO.getLocale(), inlineRenderRequestDTO.getModel());
+        String processedTemplate = freemarkerService.parseTemplateFromString(inlineRenderRequestDTO.getTemplate(), inlineRenderRequestDTO.getLocale(), inlineRenderRequestDTO.getModel());
 
         String base64 = switch (inlineRenderRequestDTO.getFormat()) {
-            case TEXT -> base64Encoder.encodeToString(processedPlain.getBytes(StandardCharsets.UTF_8));
-            case HTML -> base64Encoder.encodeToString(processed.getBytes(StandardCharsets.UTF_8));
-            case PDF -> pdfService.generateBase64PDFDocument(processed);
-            case XLS -> excelService.generateBase64ExcelDocument(processed);
+            case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
+            case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
+            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, inlineRenderRequestDTO.getContainerId(), inlineRenderRequestDTO.getModel());
         };
 
-        RenderResultDTO renderResult = mapper.mapFromInlineRequest(inlineRenderRequestDTO, base64, base64.getBytes().length);
+        RenderResultDTO renderResult = renderMapper.mapFromInlineRequest(inlineRenderRequestDTO, base64, base64.getBytes().length);
 
         return ResponseEntity.status(HttpStatus.OK).body(renderResult);
     }

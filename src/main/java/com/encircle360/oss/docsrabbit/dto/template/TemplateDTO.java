@@ -1,13 +1,13 @@
 package com.encircle360.oss.docsrabbit.dto.template;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @SuperBuilder
@@ -22,8 +22,8 @@ public class TemplateDTO {
     @Schema(name = "name", description = "Name of the template in database")
     private String name;
 
-    @Schema(name = "html", description = "Html content of the template in database")
-    private String html;
+    @Schema(name = "content", description = "Content of the template in database (HTML, plain text, base64 encoded file content, etc.)")
+    private String content;
 
     @Schema(name = "locale", description = "Locale of the template in database")
     private String locale;

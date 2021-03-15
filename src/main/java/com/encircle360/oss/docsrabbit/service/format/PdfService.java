@@ -1,17 +1,16 @@
-package com.encircle360.oss.docsrabbit.service;
+package com.encircle360.oss.docsrabbit.service.format;
+
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.XvfbConfig;
+import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.stream.Stream;
-
-import org.springframework.stereotype.Service;
-
-import com.github.jhonnymertz.wkhtmltopdf.wrapper.Pdf;
-import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.WrapperConfig;
-import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.XvfbConfig;
-import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 
 /**
  * This service generates and creates PDF documents from html content.
