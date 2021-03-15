@@ -1,5 +1,10 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
+import com.encircle360.oss.docsrabbit.model.Template;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -7,13 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneOffset;
-
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-
-import com.encircle360.oss.docsrabbit.model.Template;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader {
@@ -52,11 +50,11 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
         }
 
         return Template
-            .builder()
-            .id(templateId)
-            .name(templateId)
-            .html(baseTemplateContent)
-            .build();
+                .builder()
+                .id(templateId)
+                .name(templateId)
+                .html(baseTemplateContent)
+                .build();
     }
 
     @Override
@@ -75,6 +73,7 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
     @Override
     public Reader getReader(Object templateSource, String encoding) throws IOException {
         String content = ((Template) templateSource).getHtml();
+
         return new StringReader(content);
     }
 
@@ -82,5 +81,4 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
     public void closeTemplateSource(Object templateSource) throws IOException {
 
     }
-
 }
