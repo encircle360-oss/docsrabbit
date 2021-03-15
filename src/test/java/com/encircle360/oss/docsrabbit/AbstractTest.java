@@ -1,5 +1,8 @@
 package com.encircle360.oss.docsrabbit;
 
+import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
+import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,7 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 public abstract class AbstractTest {
@@ -63,5 +66,21 @@ public abstract class AbstractTest {
         Assertions.assertNotNull(response);
         Assertions.assertNotNull(response.getContentAsString());
         return mapper.readValue(response.getContentAsString(), tClass);
+    }
+
+    protected String getTemplate(String name, String content) throws Exception {
+        CreateUpdateTemplateDTO createUpdateTemplateDTO = CreateUpdateTemplateDTO
+                .builder()
+                .content(content)
+                .name(name)
+                .locale("de")
+                .build();
+
+        MvcResult result = post("/templates", createUpdateTemplateDTO, status().isCreated());
+
+        TemplateDTO templateDTO = resultToObject(result, TemplateDTO.class);
+        Assertions.assertNotNull(templateDTO.getLastUpdate());
+
+        return templateDTO.getId();
     }
 }

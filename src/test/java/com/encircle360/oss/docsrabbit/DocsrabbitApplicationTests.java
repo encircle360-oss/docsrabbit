@@ -9,5 +9,4 @@ class DocsrabbitApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
