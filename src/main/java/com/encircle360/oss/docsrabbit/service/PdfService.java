@@ -52,7 +52,7 @@ public class PdfService {
         }
 
         XvfbConfig xc = new XvfbConfig();
-        xc.addParams(new Param("--auto-servernum"));
+        xc.addParams(new Param("--auto-servernum"), new Param("--print-media-type"));
         wc.setXvfbConfig(xc);
         return wc;
     }
