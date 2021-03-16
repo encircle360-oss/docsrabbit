@@ -17,7 +17,7 @@ import java.util.HashMap;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class XlsSystemRenderTest extends AbstractTest {
+public class XlsRenderTest extends AbstractTest {
     @Autowired
     private ObjectMapper objectMapper;
 
