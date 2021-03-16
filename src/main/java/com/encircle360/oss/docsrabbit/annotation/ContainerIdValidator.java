@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 public class ContainerIdValidator implements ConstraintValidator<ValidateContainerId, AbstractRenderRequestDTO> {
 
     public boolean isValid(AbstractRenderRequestDTO renderRequestDTO, ConstraintValidatorContext context) {
-        if (!renderRequestDTO.getFormat().equals(RenderFormatDTO.XLS)) {
+        if (renderRequestDTO.getFormat() == null || !renderRequestDTO.getFormat().equals(RenderFormatDTO.XLS)) {
             return true;
         }
 

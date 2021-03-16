@@ -22,12 +22,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles(MongoDbConfig.PROFILE)
-public class DbRenderTest extends AbstractTest {
+public class PdfRenderTest extends AbstractTest {
     @Test
     public void render_test() throws Exception {
         RenderRequestDTO request = RenderRequestDTO.builder().build();
 
-        post("/render", request, status().isBadRequest());
+        this.post("/render", request, status().isBadRequest());
 
         HashMap<String, JsonNode> model = new HashMap<>();
         model.put("testvar", DoubleNode.valueOf(0.4));
@@ -37,7 +37,7 @@ public class DbRenderTest extends AbstractTest {
         request.setTemplateId(templateId);
         request.setModel(model);
 
-        MvcResult renderMvcResult = post("/render", request, status().isOk());
+        MvcResult renderMvcResult = this.post("/render", request, status().isOk());
         RenderResultDTO renderResult = resultToObject(renderMvcResult, RenderResultDTO.class);
         String content = new String(Base64.getDecoder().decode(renderResult.getBase64()));
         Assertions.assertEquals("asdsd 0,4", content);
@@ -46,13 +46,13 @@ public class DbRenderTest extends AbstractTest {
         model = new HashMap<>();
         request.setModel(model);
 
-        MvcResult exceptionResult = post("/render", request, status().isInternalServerError());
+        MvcResult exceptionResult = this.post("/render", request, status().isInternalServerError());
         String exception = exceptionResult.getResponse().getContentAsString();
         Assertions.assertNotNull(exception);
     }
 
     @Test
-    public void render_include() throws Exception {
+    public void render_include_db_version() throws Exception {
         HashMap<String, JsonNode> model = new HashMap<>();
         model.put("testvar", DoubleNode.valueOf(0.4));
         RenderRequestDTO request = RenderRequestDTO.builder().build();
@@ -64,7 +64,7 @@ public class DbRenderTest extends AbstractTest {
         request.setTemplateId(templateId);
         request.setModel(model);
 
-        MvcResult renderMvcResult = post("/render", request, status().isOk());
+        MvcResult renderMvcResult = this.post("/render", request, status().isOk());
 
         RenderResultDTO renderResult = resultToObject(renderMvcResult, RenderResultDTO.class);
         String content = new String(Base64.getDecoder().decode(renderResult.getBase64()));
@@ -74,8 +74,8 @@ public class DbRenderTest extends AbstractTest {
     @Test
     public void render_inline_test() throws Exception {
         InlineRenderRequestDTO inlineRenderRequestDTO = InlineRenderRequestDTO.builder().build();
-        post("/render", inlineRenderRequestDTO, status().isBadRequest());
-        post("/render/inline", inlineRenderRequestDTO, status().isBadRequest());
+        this.post("/render", inlineRenderRequestDTO, status().isBadRequest());
+        this.post("/render/inline", inlineRenderRequestDTO, status().isBadRequest());
 
         HashMap<String, JsonNode> model = new HashMap<>();
         model.put("test", TextNode.valueOf("yeaha!"));
@@ -88,10 +88,25 @@ public class DbRenderTest extends AbstractTest {
                 .locale("de")
                 .build();
 
-        MvcResult renderResult = post("/render/inline", inlineRenderRequestDTO, status().isOk());
+        MvcResult renderResult = this.post("/render/inline", inlineRenderRequestDTO, status().isOk());
         RenderResultDTO renderResultDTO = resultToObject(renderResult, RenderResultDTO.class);
         Assertions.assertNotNull(renderResultDTO);
         Assertions.assertNotNull(renderResultDTO.getBase64());
         Assertions.assertNotEquals("",renderResultDTO.getBase64());
+    }
+
+    @Test
+    public void render_default_file_template() throws Exception {
+        HashMap<String, JsonNode> model = new HashMap<>();
+        model.put("default", DoubleNode.valueOf(0.4));
+        RenderRequestDTO request = RenderRequestDTO
+                .builder()
+                .templateId("html/default")
+                .format(RenderFormatDTO.HTML)
+                .locale("de")
+                .model(model)
+                .build();
+
+        this.post("/render", request, status().isOk());
     }
 }

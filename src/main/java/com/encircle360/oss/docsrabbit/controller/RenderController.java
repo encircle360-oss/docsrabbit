@@ -3,7 +3,6 @@ package com.encircle360.oss.docsrabbit.controller;
 import com.encircle360.oss.docsrabbit.dto.render.InlineRenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.render.RenderResultDTO;
-import com.encircle360.oss.docsrabbit.mapper.RenderFormatMapper;
 import com.encircle360.oss.docsrabbit.mapper.RenderMapper;
 import com.encircle360.oss.docsrabbit.model.Template;
 import com.encircle360.oss.docsrabbit.service.FreemarkerService;
@@ -40,7 +39,6 @@ public class RenderController {
     private final static Base64.Encoder base64Encoder = Base64.getEncoder();
 
     private final RenderMapper renderMapper = RenderMapper.INSTANCE;
-    private final RenderFormatMapper renderFormatMapper = RenderFormatMapper.INSTANCE;
 
     @Operation(operationId = "render", description = "Renders the given template by id")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
