@@ -38,7 +38,6 @@ public class XlsRenderTest extends AbstractTest {
         RenderRequestDTO renderRequestDTO = RenderRequestDTO.builder()
                 .format(RenderFormatDTO.XLS)
                 .templateId("xls/default")
-                .containerId("default")
                 .model(model)
                 .build();
 

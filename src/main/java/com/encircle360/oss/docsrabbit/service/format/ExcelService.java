@@ -2,7 +2,6 @@ package com.encircle360.oss.docsrabbit.service.format;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jxls.area.Area;
@@ -11,7 +10,7 @@ import org.jxls.builder.xml.XmlAreaBuilder;
 import org.jxls.common.CellRef;
 import org.jxls.common.Context;
 import org.jxls.transform.Transformer;
-import org.jxls.util.TransformerFactory;
+import org.jxls.transform.poi.PoiTransformer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -29,30 +28,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExcelService {
     private final ObjectMapper objectMapper;
-    private final static Base64.Encoder base64Encoder = Base64.getEncoder();
+    private final Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    public String generateBase64ExcelDocument(@NonNull final String processedTemplate, final String containerId, final HashMap<String, JsonNode> model) throws IOException {
-        ObjectNode objectNode = objectMapper.convertValue(model, ObjectNode.class);
+    public String generateBase64ExcelDocument(@NonNull final String xmlConfiguration, final String templateId, final HashMap<String, JsonNode> jsonModel) throws IOException {
+        Object model = objectMapper.convertValue(jsonModel, Object.class);
 
-        // FIXME: rm file output, only for tests!
-        FileOutputStream fos = new FileOutputStream("output.xlsx");
-        this.writeXls(processedTemplate, containerId, fos, objectNode);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        this.writeXls(xmlConfiguration, templateId, outputStream, model);
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        this.writeXls(processedTemplate, containerId, os, objectNode);
-
-        return base64Encoder.encodeToString(os.toByteArray());
+        return base64Encoder.encodeToString(outputStream.toByteArray());
     }
 
 
-    private void writeXls(final String processedTemplate, final String containerId, final OutputStream os, final JsonNode jsonModel) throws IOException {
-        InputStream is = new ClassPathResource("templates/container/" + containerId + ".xlsx").getInputStream();
+    private void writeXls(final String xmlConfiguration, final String templateId, final OutputStream outputStream, final Object model) throws IOException {
+        InputStream inputStream = new ClassPathResource("templates/" + templateId + ".xlsx").getInputStream();
 
         Context context = new Context();
-        context.putVar("model", jsonModel);
+        context.putVar("model", model);
 
-        Transformer transformer = TransformerFactory.createTransformer(is, os);
-        InputStream configInputStream = new ByteArrayInputStream(processedTemplate.getBytes());
+        Transformer transformer = PoiTransformer.createTransformer(inputStream, outputStream);
+        InputStream configInputStream = new ByteArrayInputStream(xmlConfiguration.getBytes());
 
         AreaBuilder areaBuilder = new XmlAreaBuilder(configInputStream, transformer);
         List<Area> xlsAreaList = areaBuilder.build();
@@ -63,5 +58,4 @@ public class ExcelService {
         transformer.deleteSheet("Template");
         transformer.write();
     }
-
 }

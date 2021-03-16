@@ -56,7 +56,7 @@ public class RenderController {
         String base64 = switch (renderRequestDTO.getFormat()) {
             case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
             case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
-            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, renderRequestDTO.getContainerId(), renderRequestDTO.getModel());
+            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, renderRequestDTO.getTemplateId(), renderRequestDTO.getModel());
         };
         if (base64 == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -75,7 +75,9 @@ public class RenderController {
         String base64 = switch (inlineRenderRequestDTO.getFormat()) {
             case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
             case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
-            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, inlineRenderRequestDTO.getContainerId(), inlineRenderRequestDTO.getModel());
+            default -> throw new UnsupportedOperationException("Inline rendering for " + inlineRenderRequestDTO.getFormat().name() + " is not supported.");
+
+            // ToDo: Implement inline container XLSX file as base64 string
         };
 
         RenderResultDTO renderResult = renderMapper.mapFromInlineRequest(inlineRenderRequestDTO, base64, base64.getBytes().length);

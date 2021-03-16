@@ -43,7 +43,7 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
     }
 
     protected Template loadFromFiles(@NonNull final String templateId) {
-        String template = "freemarker/" + templateId + ".ftlh";
+        String template = templateId + ".ftlh";
 
         String baseTemplateContent = this.getFileContent(template);
         if (baseTemplateContent == null) {

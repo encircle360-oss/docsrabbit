@@ -1,6 +1,5 @@
 package com.encircle360.oss.docsrabbit.dto.render;
 
-import com.encircle360.oss.docsrabbit.annotation.ValidateContainerId;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,15 +14,11 @@ import java.util.HashMap;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ValidateContainerId
 @Schema(name = "AbstractRenderRequest")
 public abstract class AbstractRenderRequestDTO {
     @NotNull
     @Schema(name = "format", description = "The format in which the template should be rendered")
     private RenderFormatDTO format;
-
-    @Schema(name = "containerId", description = "Optional Id of the container template which contains the rendered content")
-    private String containerId;
 
     @Schema(name = "model", description = "Map with all attributes needed for rendering the template")
     private HashMap<String, JsonNode> model;
