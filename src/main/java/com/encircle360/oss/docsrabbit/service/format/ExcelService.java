@@ -34,7 +34,8 @@ public class ExcelService {
     public String generateBase64ExcelDocument(@NonNull final String processedTemplate, final String containerId, final HashMap<String, JsonNode> model) throws IOException {
         ObjectNode objectNode = objectMapper.convertValue(model, ObjectNode.class);
 
-        FileOutputStream fos = new FileOutputStream("/Users/marcello.muscara/Development/encircle360-oss/docsrabbit/src/main/resources/output.xlsx");
+        // FIXME: rm file output, only for tests!
+        FileOutputStream fos = new FileOutputStream("output.xlsx");
         this.writeXls(processedTemplate, containerId, fos, objectNode);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
