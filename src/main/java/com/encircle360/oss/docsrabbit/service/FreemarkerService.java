@@ -71,7 +71,6 @@ public class FreemarkerService {
     }
 
     private String processTemplate(Template template, String locale, ModelMap modelMap) throws IOException, TemplateException {
-
         template.setLocale(Locale.forLanguageTag(locale));
 
         // add import of spring macros, so we can use <@spring.messages 'x' /> in our templates

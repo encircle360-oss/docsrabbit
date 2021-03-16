@@ -1,9 +1,6 @@
 package com.encircle360.oss.docsrabbit;
 
-import static freemarker.template.Configuration.VERSION_2_3_28;
-
-import java.nio.charset.StandardCharsets;
-
+import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -13,7 +10,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-import com.encircle360.oss.docsrabbit.wrapper.JsonNodeObjectWrapper;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+
+import static freemarker.template.Configuration.VERSION_2_3_28;
 
 @SpringBootApplication(exclude = {
     MongoAutoConfiguration.class,
@@ -29,6 +29,7 @@ public class DocsrabbitApplication {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setBasenames("classpath:i18n/messages", "file:/resources/i18n/messages", "i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
 
