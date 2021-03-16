@@ -2,13 +2,12 @@
 
 ### Create PDFs
 
-![PDF with locale 'de'](img/PDF-en.png =100x20)
-![PDF with locale 'de'](img/PDF-de.png =100x20)
+<img src="img/PDF-en.png" width="200" />
+<img src="img/PDF-de.png" width="200" />
 
 #### Template
 
 #### curl
-
 
 ### Create Excel sheets
 
