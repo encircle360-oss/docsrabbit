@@ -43,7 +43,10 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
     }
 
     protected Template loadFromFiles(@NonNull final String templateId) {
-        String template = templateId + ".ftlh";
+        String template = templateId;
+        if (!template.endsWith(".ftlh") && !template.endsWith(".ftl")) {
+            template = template + ".ftlh";
+        }
 
         String baseTemplateContent = this.getFileContent(template);
         if (baseTemplateContent == null) {
