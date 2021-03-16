@@ -10,7 +10,7 @@ import org.jxls.builder.xml.XmlAreaBuilder;
 import org.jxls.common.CellRef;
 import org.jxls.common.Context;
 import org.jxls.transform.Transformer;
-import org.jxls.transform.poi.PoiTransformer;
+import org.jxls.util.TransformerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class ExcelService {
         Context context = new Context();
         context.putVar("model", model);
 
-        Transformer transformer = PoiTransformer.createTransformer(inputStream, outputStream);
+        Transformer transformer = TransformerFactory.createTransformer(inputStream, outputStream);
         InputStream configInputStream = new ByteArrayInputStream(xmlConfiguration.getBytes());
 
         AreaBuilder areaBuilder = new XmlAreaBuilder(configInputStream, transformer);

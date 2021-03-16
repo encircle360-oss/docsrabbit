@@ -8,38 +8,38 @@ curl --location --request POST 'http://localhost:50005/render' \
         "employees": [
             {
                 "name": "Yvette Stoltenberg",
-                "age": 242,
+                "age": 22,
                 "payment": 780.39,
                 "bonus": 1.4,
-                "birthDate": "Tue Mar 16 2021 02:45:25 GMT+0100 (Central European Standard Time)"
+                "birthDate": "03.10.1976"
             },
             {
                 "name": "Callie Wisoky",
-                "age": 376,
+                "age": 36,
                 "payment": 896.78,
                 "bonus": 4.2,
-                "birthDate": "Tue Mar 16 2021 08:15:07 GMT+0100 (Central European Standard Time)"
+                "birthDate": "03.10.1976"
             },
             {
                 "name": "Jefferey Huels",
-                "age": 398,
+                "age": 38,
                 "payment": 835.05,
                 "bonus": 9.2,
-                "birthDate": "Mon Mar 15 2021 16:29:38 GMT+0100 (Central European Standard Time)"
+                "birthDate": "03.10.1976"
             },
             {
                 "name": "Foster Stroman",
-                "age": 391,
+                "age": 31,
                 "payment": 297.2,
                 "bonus": 0.2,
-                "birthDate": "Tue Mar 16 2021 08:01:05 GMT+0100 (Central European Standard Time)"
+                "birthDate": "03.10.1976"
             },
             {
                 "name": "Ora Cummerata",
-                "age": 405,
+                "age": 45,
                 "payment": 569.72,
                 "bonus": 22.2,
-                "birthDate": "Mon Mar 15 2021 15:18:12 GMT+0100 (Central European Standard Time)"
+                "birthDate": "03.10.1976"
             }
         ]
     }
