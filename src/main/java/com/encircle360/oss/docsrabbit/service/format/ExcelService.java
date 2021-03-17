@@ -1,5 +1,6 @@
 package com.encircle360.oss.docsrabbit.service.format;
 
+import com.encircle360.oss.docsrabbit.service.template.FileTemplateLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.jxls.common.CellRef;
 import org.jxls.common.Context;
 import org.jxls.transform.Transformer;
 import org.jxls.util.TransformerFactory;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +27,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ExcelService {
+    private final FileTemplateLoader fileTemplateLoader;
+
     private final ObjectMapper objectMapper;
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
 
@@ -41,7 +43,7 @@ public class ExcelService {
 
 
     private void writeXls(final String xmlConfiguration, final String templateId, final OutputStream outputStream, final Object model) throws IOException {
-        InputStream inputStream = new ClassPathResource("templates/" + templateId + ".xlsx").getInputStream();
+        InputStream inputStream = fileTemplateLoader.getFileResource(templateId + ".xlsx").getInputStream();
 
         Context context = new Context();
         context.putVar("model", model);

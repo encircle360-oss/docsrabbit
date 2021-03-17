@@ -4,14 +4,12 @@ import com.encircle360.oss.docsrabbit.model.Template;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZoneOffset;
 
 @Slf4j
@@ -42,6 +40,20 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
 
     }
 
+    @Override
+    public Resource getFileResource(String path) {
+        Resource resource = new ClassPathResource("templates/" + path);
+        if (!resource.exists()) {
+            resource = new PathResource("/resources/templates/" + path);
+
+            if (!resource.exists()) {
+                return null;
+            }
+        }
+
+        return resource;
+    }
+
     protected Template loadFromFiles(@NonNull final String templateId) {
         String template = templateId;
         if (!template.endsWith(".ftlh") && !template.endsWith(".ftl")) {
@@ -62,24 +74,19 @@ public abstract class AbstractTemplateLoader implements DocsRabbitTemplateLoader
     }
 
     protected String getFileContent(String path) {
-        Resource resource = new ClassPathResource("templates/" + path);
-        if (resource.exists()) {
-            try {
-                return new String(resource.getInputStream().readAllBytes());
-            } catch (IOException e) {
-                log.error(e.getMessage());
-            }
+        Resource resource = this.getFileResource(path);
+        if (resource == null) {
+            return null;
         }
 
-        Path filePath = Paths.get("/resources/templates/" + path);
-        if (Files.exists(filePath)) {
-            try {
-                return Files.readString(filePath);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
+        String fileContent = null;
+
+        try {
+            fileContent = new String(resource.getInputStream().readAllBytes());
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
 
-        return null;
+        return fileContent;
     }
 }

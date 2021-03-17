@@ -29,8 +29,8 @@ public class DocsrabbitApplication {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setBasenames("classpath:i18n/messages", "file:/resources/i18n/messages", "i18n/messages");
+        messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
 
         return messageSource;
