@@ -53,6 +53,11 @@ public class ExcelService {
 
         AreaBuilder areaBuilder = new XmlAreaBuilder(configInputStream, transformer);
         List<Area> xlsAreaList = areaBuilder.build();
+        if (xlsAreaList == null || xlsAreaList.isEmpty()) {
+            log.error("No XLS area found!");
+            return;
+        }
+
         Area xlsArea = xlsAreaList.get(0);
         xlsArea.applyAt(new CellRef("Result!A1"), context);
         xlsArea.processFormulas();
