@@ -4,20 +4,20 @@
 
 To run an instance with default configuration and without database support just run:
 
-````
-docker run -p 50005:50005 -p 50006:50006 \
+```shell
+docker run -p 50005:50005 -p 51005:51005 \
     registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
-````
+```
 
 For database support with mongodb please use this command
 
-````
-docker run -p 50005:50005 -p 50006:50006 \
+```shell
+docker run -p 50005:50005 -p 51005:51005 \
     --env SPRING_PROFILES_ACTIVE=mongo \
     --env MONGO_URI=mongodb://localhost:27017/docsrabbit \
     --env MONGO_DATABASE=docsrabbit \
     registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
-````
+```
 
 ### Features of docsrabbit
 
@@ -35,7 +35,7 @@ For all available endpoints visit
 ### Example REST calls for rendering a template
 Let's render the default template from scratch 
 
-```
+```shell
 curl -X POST "http://localhost:50005/render" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"format\":\"HTML\",\"templateId\":\"default\",\"model\":{\"default\":\"ich bin standart\"}}"
 ```
 
@@ -45,7 +45,7 @@ If you use a template id, where you don't have any templates in file system or d
 
 Since docsrabbit will lookup for templates in `/resources/templates/` and i18n files in `/resources/i18n/` you can use the following Dockerfile as example to create your own docker image with your own templates and i18n.
 You can find examples how [templates](src/main/resources/templates) or [i18n files](src/main/resources/i18n) look like [here](src/main/resources).
-```
+```dockerfile
 FROM registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
 ADD templates /resources/templates # add your template directory containing *.ftlh templates here
 ADD i18n /resources/i18n # add your i18n directory containing messages.properties files here

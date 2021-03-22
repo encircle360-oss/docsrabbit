@@ -1,14 +1,10 @@
 package com.encircle360.oss.docsrabbit.service.template;
 
-import java.io.IOException;
-
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-
 import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
 import com.encircle360.oss.docsrabbit.model.Template;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,19 +21,21 @@ public class MongoDbTemplateLoader extends AbstractTemplateLoader {
 
         Template template = templateService.get(templateId);
         if (template == null) {
-            return loadFromFiles(templateId);
+            // Fallback filesystem
+            return super.loadFromFiles(templateId);
         }
+
         return template;
     }
 
     @Override
-    public Object findTemplateSource(String name) throws IOException {
+    public Object findTemplateSource(String name) {
         if (name.endsWith(".ftlh") || name.endsWith(".ftl")) {
             name = name.replace(".ftlh", "").replace(".ftl", "");
         }
 
         Template template = templateService.getByName(name);
-        return template == null ? loadTemplate(name) : template;
+        return template == null ? this.loadTemplate(name) : template;
     }
 
 }

@@ -4,12 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "RenderFormat", description = "Defines a format for rendering")
 public enum RenderFormatDTO {
-    PDF("application/pdf"),TEXT("plain/text"), HTML("text/html");
+    TEXT("plain/text"),
+    HTML("text/html"),
+    PDF("application/pdf"),
+    XLS("application/msexcel");
 
     public final String value;
 
-    private RenderFormatDTO(String mimeType) {
+    RenderFormatDTO(String mimeType) {
         this.value = mimeType;
     }
-
 }

@@ -1,9 +1,14 @@
 package com.encircle360.oss.docsrabbit.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
+import com.encircle360.oss.docsrabbit.dto.PageContainer;
+import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
+import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
+import com.encircle360.oss.docsrabbit.mapper.TemplateMapper;
+import com.encircle360.oss.docsrabbit.model.Template;
+import com.encircle360.oss.docsrabbit.service.template.TemplateService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,26 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.encircle360.oss.docsrabbit.config.MongoDbConfig;
-import com.encircle360.oss.docsrabbit.dto.PageContainer;
-import com.encircle360.oss.docsrabbit.dto.template.CreateUpdateTemplateDTO;
-import com.encircle360.oss.docsrabbit.dto.template.TemplateDTO;
-import com.encircle360.oss.docsrabbit.mapper.TemplateMapper;
-import com.encircle360.oss.docsrabbit.model.Template;
-import com.encircle360.oss.docsrabbit.service.template.TemplateService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
+import javax.validation.Valid;
+import java.util.List;
 
 @Validated
 @RestController
