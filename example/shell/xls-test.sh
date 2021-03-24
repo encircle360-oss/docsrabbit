@@ -43,6 +43,6 @@ curl --location --request POST 'http://localhost:50005/render' \
             }
         ]
     }
-}' | jq -r .base64 | base64 -D >~/Desktop/test.xlsx
+}' | jq -r .base64 | base64 -D > test.xlsx
 
-open ~/Desktop/test.xlsx
+open test.xlsx
