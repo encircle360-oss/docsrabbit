@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -39,6 +40,7 @@ public class PdfService {
         File htmlHeaderFile = null;
         File htmlFooterFile = null;
         Pdf pdf = new Pdf(this.getWkhtmlToPdfWrapperConfig());
+        pdf.addParam(new Param("--encoding", Charset.defaultCharset().name()));
         pdf.addParam(new Param("--print-media-type"));
 
         // add header if given
@@ -70,7 +72,7 @@ public class PdfService {
     private File writeTempHtmlFile(String content) throws IOException {
         File tmpFile = File.createTempFile("tmp_", ".html");
         tmpFile.deleteOnExit();
-        FileWriter writer = new FileWriter(tmpFile);
+        FileWriter writer = new FileWriter(tmpFile, Charset.defaultCharset());
         writer.write(content);
         writer.close();
         return tmpFile;
