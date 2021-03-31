@@ -11,4 +11,4 @@ RUN apt -y --no-install-recommends install openjdk-14-jre
 ADD /build/libs/*.jar /docsrabbit.jar
 
 ENV SPRING_PROFILES_ACTIVE=production
-ENTRYPOINT ["java","-Duser.language=en-US", "-Djava.security.egd=file:/dev/./urandom","-jar","/docsrabbit.jar"]
+ENTRYPOINT ["java","-Duser.language=en-US", "-Dfile.encoding=UTF-8", "-Djava.security.egd=file:/dev/./urandom","-jar","/docsrabbit.jar"]

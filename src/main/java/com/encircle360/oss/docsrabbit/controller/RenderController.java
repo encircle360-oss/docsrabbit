@@ -43,21 +43,35 @@ public class RenderController {
     @Operation(operationId = "render", description = "Renders the given template by id")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RenderResultDTO> render(@RequestBody @Valid RenderRequestDTO renderRequestDTO) throws Exception {
-        Template template = templateLoader.loadTemplate(renderRequestDTO.getTemplateId());
-        if (template == null) {
+        Template contentTemplate = templateLoader.loadTemplate(renderRequestDTO.getTemplateId());
+        if (contentTemplate == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         if (renderRequestDTO.getLocale() != null) {
-            template.setLocale(renderRequestDTO.getLocale());
+            contentTemplate.setLocale(renderRequestDTO.getLocale());
         }
 
-        String processedTemplate = freemarkerService.parseTemplateFromString(template.getContent(), template.getLocale(), renderRequestDTO.getModel());
-        String base64 = switch (renderRequestDTO.getFormat()) {
-            case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
-            case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
-            case XLS -> excelService.generateBase64ExcelDocument(processedTemplate, renderRequestDTO.getTemplateId(), renderRequestDTO.getModel());
-        };
+        String processedTemplate = freemarkerService.parseTemplateFromString(contentTemplate.getContent(), contentTemplate.getLocale(), renderRequestDTO.getModel());
+        String base64 = null;
+        switch (renderRequestDTO.getFormat()) {
+            case TEXT, HTML -> base64 = base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
+            case PDF -> {
+                Template headerTemplate = templateLoader.loadTemplate(renderRequestDTO.getTemplateId() + "_header");
+                Template footerTemplate = templateLoader.loadTemplate(renderRequestDTO.getTemplateId() + "_footer");
+                String processedHeaderTemplate = null;
+                String processedFooterTemplate = null;
+                if (headerTemplate != null) {
+                    processedHeaderTemplate = freemarkerService.parseTemplateFromString(headerTemplate.getContent(), contentTemplate.getLocale(), renderRequestDTO.getModel());
+                }
+                if (footerTemplate != null) {
+                    processedFooterTemplate = freemarkerService.parseTemplateFromString(footerTemplate.getContent(), contentTemplate.getLocale(), renderRequestDTO.getModel());
+                }
+                base64 = pdfService.generateBase64PDFDocument(processedTemplate, processedHeaderTemplate, processedFooterTemplate);
+            }
+            case XLS -> base64 = excelService.generateBase64ExcelDocument(processedTemplate, renderRequestDTO.getTemplateId(), renderRequestDTO.getModel());
+        }
+
         if (base64 == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -74,7 +88,7 @@ public class RenderController {
 
         String base64 = switch (inlineRenderRequestDTO.getFormat()) {
             case TEXT, HTML -> base64Encoder.encodeToString(processedTemplate.getBytes(StandardCharsets.UTF_8));
-            case PDF -> pdfService.generateBase64PDFDocument(processedTemplate);
+            case PDF -> pdfService.generateBase64PDFDocument(processedTemplate, null, null);
             default -> throw new UnsupportedOperationException("Inline rendering for " + inlineRenderRequestDTO.getFormat().name() + " is not supported.");
 
             // ToDo: Implement inline container XLSX file as base64 string
