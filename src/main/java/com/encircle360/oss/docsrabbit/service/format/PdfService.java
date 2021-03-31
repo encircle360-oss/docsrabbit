@@ -6,6 +6,8 @@ import com.github.jhonnymertz.wkhtmltopdf.wrapper.configurations.XvfbConfig;
 import com.github.jhonnymertz.wkhtmltopdf.wrapper.params.Param;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,26 +24,56 @@ public class PdfService {
 
     public static Boolean isRunningInsideDocker() {
         try (Stream<String> stream =
-            Files.lines(Paths.get("/proc/1/cgroup"))) {
+                     Files.lines(Paths.get("/proc/1/cgroup"))) {
             return stream.anyMatch(line -> line.contains("/docker"));
         } catch (IOException e) {
             return false;
         }
     }
 
-    public String generateBase64PDFDocument(String htmlContent) throws IOException, InterruptedException{
-        return base64Encoder.encodeToString(generatePDFDocument(htmlContent));
+    public String generateBase64PDFDocument(String htmlContent, String htmlHeader, String htmlFooter) throws IOException, InterruptedException {
+        return base64Encoder.encodeToString(generatePDFDocument(htmlContent, htmlHeader, htmlFooter));
     }
 
-    public byte[] generatePDFDocument(String htmlContent) throws IOException, InterruptedException {
+    public byte[] generatePDFDocument(String htmlContent, String htmlHeader, String htmlFooter) throws IOException, InterruptedException {
+        File htmlHeaderFile = null;
+        File htmlFooterFile = null;
         Pdf pdf = new Pdf(this.getWkhtmlToPdfWrapperConfig());
         pdf.addParam(new Param("--print-media-type"));
 
-        // TODO split htmlContent to pages
-        // maybe use of https://stackoverflow.com/questions/1664049/can-i-force-a-page-break-in-html-printing
-        pdf.addPageFromString(htmlContent);
+        // add header if given
+        if (htmlHeader != null && !htmlHeader.isEmpty()) {
+            htmlHeaderFile = this.writeTempHtmlFile(htmlHeader);
+            pdf.addParam(new Param("--header-html", htmlHeaderFile.getAbsolutePath()));
+        }
 
-        return pdf.getPDF();
+        if (htmlFooter != null && !htmlFooter.isEmpty()) {
+            htmlFooterFile = this.writeTempHtmlFile(htmlFooter);
+            pdf.addParam(new Param("--footer-html", htmlFooterFile.getAbsolutePath()));
+        }
+
+        pdf.addPageFromString(htmlContent);
+        byte[] generatedPdfAsBytes = pdf.getPDF();
+
+        // cleanup if needed
+        if (htmlHeaderFile != null) {
+            htmlHeaderFile.delete();
+        }
+
+        if (htmlFooterFile != null) {
+            htmlFooterFile.delete();
+        }
+
+        return generatedPdfAsBytes;
+    }
+
+    private File writeTempHtmlFile(String content) throws IOException {
+        File tmpFile = File.createTempFile("tmp_", ".html");
+        tmpFile.deleteOnExit();
+        FileWriter writer = new FileWriter(tmpFile);
+        writer.write(content);
+        writer.close();
+        return tmpFile;
     }
 
     private WrapperConfig getWkhtmlToPdfWrapperConfig() {
