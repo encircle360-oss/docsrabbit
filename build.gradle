@@ -25,12 +25,17 @@ repositories {
 
 dependencies {
     // templating & rendering
-    compile 'com.github.jhonnymertz:java-wkhtmltopdf-wrapper:1.1.13-RELEASE'
-    compile 'no.api.freemarker:freemarker-java8:1.3.0'
+    implementation 'com.github.jhonnymertz:java-wkhtmltopdf-wrapper:1.1.13-RELEASE'
+    implementation 'no.api.freemarker:freemarker-java8:1.3.0'
 
-    // XLS libs
-    compile 'org.jxls:jxls:2.10.0-rc1'
-    compile 'org.jxls:jxls-poi:2.10.0-rc1'
+    // XLS
+    implementation 'org.jxls:jxls:2.10.0-rc1'
+    implementation 'org.jxls:jxls-poi:2.10.0-rc1'
+
+    // OCR
+    implementation 'org.apache.tika:tika-parsers:1.26'
+    implementation 'com.levigo.jbig2:levigo-jbig2-imageio:2.0'
+    implementation 'com.github.jai-imageio:jai-imageio-core:1.4.0'
 
     // spring-boot-starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
