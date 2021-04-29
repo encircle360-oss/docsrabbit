@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
                 description = "DocsRabbit - Render templates the way you want. Scan documents of many standard file types.",
                 contact = @Contact(
                         name = "encircle360 GmbH",
-                        url = "https://www.encircle360.com"
+                        url = "https://encircle360.com"
                 )
         ),
         servers = {
