@@ -47,18 +47,20 @@ docker-build-staging:
 
 create-badges:
   stage: build
+#  stage: package
   image: python:3.6.6
 #  only:
 #    - master
   script:
     - echo "Python other dependencies installation"
-  after_script:
     - pip install anybadge #https://github.com/jongracecox/anybadge
     - echo commits $COMMITS latest_version $LATEST_VERSION
+    - mkdir badges
     - anybadge -o -l "latest version" -v $LATEST_VERSION -f latestversion.svg -c green
     - anybadge -o -l "commits" -v $COMMITS -f commits.svg -c lightgrey
     - anybadge -o -l "licence" -v "Apache License" -f license.svg -c yellowgreen
     - anybadge -o -l "awesomeness" -v "110%" -f awesomeness.svg -c orange
+    - ls -la
   artifacts:
     paths:
       - latestversion.svg
