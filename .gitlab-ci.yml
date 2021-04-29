@@ -4,7 +4,7 @@ services:
   - docker:dind
 
 stages:
-  #- build
+  - build
   - package
 
 before_script:
@@ -21,6 +21,8 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
+  only:
+    - master
 
 docker-build:
   stage: package
