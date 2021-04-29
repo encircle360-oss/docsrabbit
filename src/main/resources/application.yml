@@ -21,3 +21,11 @@ docsrabbit:
     default-template: default.ftlh
   xls:
     default-template: default.xls
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    host: "http://localhost:${server.port}"
+    url: "/v3/api-docs/"
+  api-docs:
+    path: "/v3/api-docs/"
