@@ -11,6 +11,7 @@ import com.encircle360.oss.docsrabbit.service.format.PdfService;
 import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
 import freemarker.template.TemplateException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import java.util.Base64;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/render")
+@Tag(name = "Rendering", description = "Render Templates")
 public class RenderController {
 
     private final DocsRabbitTemplateLoader templateLoader;

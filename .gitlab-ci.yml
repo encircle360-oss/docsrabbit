@@ -21,6 +21,8 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
+  only:
+    - master
 
 docker-build:
   stage: package
@@ -47,8 +49,8 @@ docker-build-staging:
 create-badges:
   stage: build
   image: python:3.6.6
-  only:
-    - master
+#  only:
+#    - master
   script:
     - echo "Python other dependencies installation"
   after_script:

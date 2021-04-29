@@ -3,6 +3,7 @@ package com.encircle360.oss.docsrabbit.controller;
 import com.encircle360.oss.docsrabbit.dto.ocr.OCRResultDTO;
 import com.encircle360.oss.docsrabbit.service.ocr.OCRService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ocr")
+@Tag(name = "OCR", description = "OCR Document Parsing")
 public class OCRController {
 
     private final OCRService ocrService;
