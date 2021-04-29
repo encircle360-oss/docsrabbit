@@ -16,7 +16,7 @@ curl --location --request POST 'http://localhost:50005/render' \
             "city": "Coltmouth"
         },
         "subject": "Customizable compressing orchestration Investor",
-        "text": "Et itaque ratione. In suscipit error dolorem occaecati eos fugiat omnis nihil. Non perspiciatis adipisci et quaerat dolorem autem sit atque neque. Qui aliquid sint libero. Suscipit accusantium sit qui quia cum quis sit culpa dolorum. Ut et omnis ea doloremque eveniet.",
+        "text": "Et itaque ratione. In suscipit error dolorem occaecati eos .",
         "sender": {
             "firstName": "Cale",
             "lastName": "Bartoletti"

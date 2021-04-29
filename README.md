@@ -1,4 +1,12 @@
-## DocsRabbit - Rendering templates to whatever you want
+[![pipeline status](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/badges/master/pipeline.svg)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/commits/master)
+[![latest version](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/latestversion.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/tags)
+[![commits](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/commits.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/commits)
+[![licence](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/license.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE)
+[![awesomeness](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/awesomeness.svg?job=create-badges)](https://encircle360.com)
+
+## DocsRabbit - Render templates | Scan document
+
+##### Render templates the way you want. Scan documents of many standard file types.
 
 ### Getting started
 
@@ -21,25 +29,61 @@ docker run -p 50005:50005 -p 51005:51005 \
 
 ### Features of docsrabbit
 
+Rendering: 
 * Using templates from filesystem
 * Using templates out of mongodb (activate mongo profile)
 * Internationalization 
 * Inline rendering (you can post the template directly to render)
 * Multiple rendering types: PDF, PLAIN, HTML
-* Base64 encoded transfer of data 
+* Base64 encoded transfer of data
+  
+OCR: 
+* Make OCR scans direct from single files like PDF, Word, Excel, etc. 
 
-For all available endpoints visit
+For all available endpoints visit the OpenAPI specs:
 
 `http://localhost:50005/swagger-ui/index.html?url=http://localhost:50005/v3/api-docs#/`
 
-### Example REST calls for rendering a template
+### Example REST call for rendering a template
 Let's render the default template from scratch 
 
 ```shell
-curl -X POST "http://localhost:50005/render" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"format\":\"HTML\",\"templateId\":\"default\",\"model\":{\"default\":\"ich bin standart\"}}"
+curl --location --request POST 'http://localhost:50005/render' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "templateId": "html/default",
+    "format": "PDF",
+    "locale": "en",
+    "model": {
+        "title": "Fresh CFA schemas Plastic interface",
+        "date": "2021-03-10T11:05:09.816",
+        "address": {
+            "firstName": "Jane",
+            "lastName": "Champlin",
+            "street": "381 Blick Parks",
+            "houseNumber": "194",
+            "zip": "595932",
+            "city": "Coltmouth"
+        },
+        "subject": "Customizable compressing orchestration Investor",
+        "text": "Et itaque ratione. In suscipit error dolorem occaecati eos .",
+        "sender": {
+            "firstName": "Cale",
+            "lastName": "Bartoletti"
+        }
+    }
+}'
 ```
 
-If you use a template id, where you don't have any templates in file system or database a 404 error will be returned
+### Example REST call for a OCR scan from a file 
+
+```shell
+curl -X 'POST' \
+  'http://localhost:50005/ocr' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@/path--to-files/example.pdf;type=application/pdf'
+```
 
 ### Example Dockerfile
 

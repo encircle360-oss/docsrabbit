@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.encircle360.oss.docsrabbit'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.4-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_14
@@ -45,7 +45,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // openAPI specs
-    implementation 'org.springdoc:springdoc-openapi-ui:1.4.2'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.8'
 
     // spring boot stuff
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
