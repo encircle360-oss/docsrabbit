@@ -5,6 +5,9 @@ spring:
     mongodb:
       database: ${MONGO_DATABASE:docsrabbit}
       uri: ${MONGO_URI:mongodb://localhost:27017/docsrabbit}
+  servlet:
+    multipart:
+      max-file-size: 100MB
 
 server:
   port: 50005
