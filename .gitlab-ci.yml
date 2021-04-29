@@ -46,11 +46,10 @@ docker-build-staging:
     - docker push $CI_REGISTRY_IMAGE:$LATEST_VERSION-staging
 
 create-badges:
-  stage: build
-#  stage: package
+  stage: package
   image: python:3.6.6
-#  only:
-#    - master
+  only:
+    - master
   script:
     - echo "Python other dependencies installation"
     - pip install anybadge #https://github.com/jongracecox/anybadge
