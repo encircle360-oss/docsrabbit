@@ -1,8 +1,8 @@
 [![pipeline status](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/badges/master/pipeline.svg)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/commits/master)
-[![latest version](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/latestversion.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/tags)
-[![commits](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/commits.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/commits)
-[![licence](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/license.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE)
-[![awesomeness](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/awesomeness.svg?job=create-badges)](https://www.encircle360.com)
+[![latest version](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/badges/latestversion.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/tags)
+[![commits](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/badges/commits.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/commits)
+[![licence](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/badges/license.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE)
+[![awesomeness](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/ocr-scan/raw/badges/awesomeness.svg?job=create-badges)](https://www.encircle360.com)
 
 ## DocsRabbit - Render templates | Scan document
 
