@@ -1,8 +1,8 @@
 [![pipeline status](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/badges/master/pipeline.svg)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/commits/master)
-[![latest version](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/documentation/raw/badges/latestversion.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/tags)
-[![commits](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/documentation/raw/badges/commits.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/commits)
-[![licence](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/documentation/raw/badges/license.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE)
-[![awesomeness](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/features/documentation/raw/badges/awesomeness.svg?job=create-badges)](https://www.encircle360.com)
+[![latest version](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/latestversion.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/tags)
+[![commits](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/commits.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/commits)
+[![licence](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/license.svg?job=create-badges)](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE)
+[![awesomeness](https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/jobs/artifacts/master/raw/badges/awesomeness.svg?job=create-badges)](https://www.encircle360.com)
 
 ## DocsRabbit - Render templates | Scan document
 
@@ -38,7 +38,7 @@ Rendering:
 * Base64 encoded transfer of data
   
 OCR: 
-* OCR scans for files like PDF, Word, Excel, etc. 
+* Make OCR scans direct from single files like PDF, Word, Excel, etc. 
 
 For all available endpoints visit the OpenAPI specs:
 
