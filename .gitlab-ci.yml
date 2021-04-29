@@ -21,8 +21,6 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
-  only:
-    - master
 
 docker-build:
   stage: package
@@ -47,20 +45,18 @@ docker-build-staging:
     - docker push $CI_REGISTRY_IMAGE:$(git describe --tags)-staging
 
 create-badges:
-  stage: package
+  stage: build
   image: python:3.6.6
-#  only:
-#    - master
+  only:
+    - master
   script:
     - echo "Python other dependencies installation"
   after_script:
     - pip install anybadge
     - commits=$(git rev-list --all --count)
     - latest_version=$(git describe --tags)
-    - anybadge -l "latest version" -v $latest_version -f latestversion.svg -c green
-    - anybadge -l "commits" -v $commits -f commits.svg -c silver
-    - anybadge -l "licence" -v "Apache License" -f license.svg -c green
-    - anybadge -l "awesomeness" -v "110%" -f awesomeness.svg -c orange
+    - echo commits $commits | latest_version $latest_version
+    - anybadge -l "latest version" -v $latest_version -f latestversion.svg -c green ; anybadge -l "commits" -v $commits -f commits.svg -c silver ; anybadge -l "licence" -v "Apache License" -f license.svg -c green ; anybadge -l "awesomeness" -v "110%" -f awesomeness.svg -c orange
   artifacts:
     paths:
       - commits.svg
