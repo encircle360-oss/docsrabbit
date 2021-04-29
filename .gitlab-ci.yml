@@ -22,8 +22,6 @@ gradle-build:
   artifacts:
     paths:
       - build/libs/*.jar
-  only:
-    - master
 
 docker-build:
   stage: package
@@ -55,7 +53,7 @@ create-badges:
   script:
     - echo "Python other dependencies installation"
   after_script:
-    - pip install anybadge
+    - pip install anybadge #https://github.com/jongracecox/anybadge
     - echo commits $COMMITS latest_version $LATEST_VERSION
     - anybadge -o -l "latest version" -v $LATEST_VERSION -f latestversion.svg -c green
     - anybadge -o -l "commits" -v $COMMITS -f commits.svg -c lightgrey
@@ -63,5 +61,7 @@ create-badges:
     - anybadge -o -l "awesomeness" -v "110%" -f awesomeness.svg -c orange
   artifacts:
     paths:
+      - latestversion.svg
       - commits.svg
-      - latestVersion.svg
+      - license.svg
+      - awesomeness.svg
