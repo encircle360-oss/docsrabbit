@@ -4,7 +4,7 @@ services:
   - docker:dind
 
 stages:
-  - build
+  #- build
   - package
 
 before_script:
@@ -55,10 +55,10 @@ create-badges:
     - pip install anybadge
     - commits=$(git rev-list --all --count)
     - latest_version=$(git describe --tags)
-    - anybadge -l "commits" -v $commits -f commits.svg -c lime
-    - anybadge -l "latest version" -v $latest_version -f latest-version.svg -c lime
-    - anybadge -l "licence" -v "Apache License" -f license.svg -c lime
-    - anybadge -l="awesomeness" -v="110%" -f=awesomeness.svg -c=#97CA00
+    - anybadge -l "latest version" -v $latest_version -f latestversion.svg -c green
+    - anybadge -l "commits" -v $commits -f commits.svg -c silver
+    - anybadge -l "licence" -v "Apache License" -f license.svg -c green
+    - anybadge -l "awesomeness" -v "110%" -f awesomeness.svg -c orange
   artifacts:
     paths:
       - commits.svg
