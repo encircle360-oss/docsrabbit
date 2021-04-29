@@ -55,8 +55,10 @@ create-badges:
     - pip install anybadge
     - commits=$(git rev-list --all --count)
     - latest_version=$(git describe --tags)
-    - anybadge -l commits -v $commits -f commits.svg -c green
-    - anybadge -l "Latest Version" -v $latest_version -f latestVersion.svg -c blue
+    - anybadge -l "commits" -v $commits -f commits.svg -c lime
+    - anybadge -l "latest version" -v $latest_version -f latest-version.svg -c lime
+    - anybadge -l "licence" -v "Apache License" -f license.svg -c lime
+    - anybadge -l="awesomeness" -v="110%" -f=awesomeness.svg -c=#97CA00
   artifacts:
     paths:
       - commits.svg

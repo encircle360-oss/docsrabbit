@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "DocsRabbit API Documentation",
                 version = "v0.4",
-                license = @License(name = "License", url = "https://github.com/encircle360-oss/docsrabbit/blob/master/LICENSE"),
+                license = @License(name = "License", url = "https://gitlab.com/encircle360-oss/docsrabbit/docsrabbit/-/blob/master/LICENSE"),
                 description = "DocsRabbit - Render templates the way you want. Scan documents of many standard file types.",
                 contact = @Contact(
                         name = "encircle360 GmbH",
