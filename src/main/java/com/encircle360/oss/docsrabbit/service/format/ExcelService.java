@@ -19,7 +19,7 @@ import org.jxls.util.TransformerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.encircle360.oss.docsrabbit.service.template.FileTemplateLoader;
+import com.encircle360.oss.docsrabbit.service.template.DocsRabbitTemplateLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class ExcelService {
-    private final FileTemplateLoader fileTemplateLoader;
+    private final DocsRabbitTemplateLoader templateLoader;
 
     private final ObjectMapper objectMapper;
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
@@ -59,7 +59,7 @@ public class ExcelService {
 
     private void writeXls(final String xmlConfiguration, final String templateId, final OutputStream outputStream, final HashMap<String, Object> models)
         throws IOException {
-        InputStream inputStream = fileTemplateLoader.getFileResource(templateId + ".xlsx").getInputStream();
+        InputStream inputStream = templateLoader.getFileResource(templateId + ".xlsx").getInputStream();
 
         Transformer transformer = TransformerFactory.createTransformer(inputStream, outputStream);
         InputStream configInputStream = new ByteArrayInputStream(xmlConfiguration.getBytes());
