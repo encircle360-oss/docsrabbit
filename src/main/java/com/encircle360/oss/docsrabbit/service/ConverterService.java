@@ -14,7 +14,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,40 +24,15 @@ public class ConverterService {
     private final Base64.Encoder encoder = Base64.getEncoder();
 
     private final List<String> TEXT_OUTPUT = List.of(
-        "bib",
-        "xml",
-        "html",
-        "ltx",
-        "doc",
-        "odt",
-        "txt",
-        "pdf",
-        "rtf",
-        "sdw"
+        "bib", "xml", "html", "ltx", "doc", "odt", "txt", "pdf", "rtf", "sdw"
     );
 
     private final List<String> GRAPHIC_OUTPUT = List.of(
-        "eps",
-        "emf",
-        "gif",
-        "jpg",
-        "odd",
-        "pdf",
-        "png",
-        "svg",
-        "tiff",
-        "bmp"
+        "eps", "emf", "gif", "jpg", "odd", "pdf", "png", "svg", "tiff", "bmp"
     );
 
     private final List<String> TABLE_OUTPUT = List.of(
-        "csv",
-        "html",
-        "xls",
-        "xml",
-        "ods",
-        "pdf",
-        "sdc",
-        "xhtml"
+        "csv", "html", "xls", "xml", "ods", "pdf", "sdc", "xhtml"
     );
 
     private final Map<String, List<String>> ACCEPTABLE_INPUT_OUTPUT = new HashMap<>();
