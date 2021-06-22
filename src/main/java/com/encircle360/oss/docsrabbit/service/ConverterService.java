@@ -1,7 +1,8 @@
 package com.encircle360.oss.docsrabbit.service;
 
+import static com.encircle360.oss.docsrabbit.util.IOUtils.*;
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +10,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -120,19 +120,6 @@ public class ConverterService {
         deleteWithoutThrow(outputFile);
 
         return resultBytes;
-    }
-
-    private Path createRandomTmpFile(String fileExtension) throws IOException {
-        Path path = Path.of("/tmp/" + UUID.randomUUID().toString() + "." + fileExtension);
-        return Files.createFile(path);
-    }
-
-    private void deleteWithoutThrow(Path file) {
-        try {
-            Files.delete(file);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
     }
 
     public boolean isSupported(String inputFormat) {
