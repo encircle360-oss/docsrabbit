@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 
 import org.springframework.stereotype.Service;
 
+import com.encircle360.oss.docsrabbit.util.IOUtils;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -23,34 +25,33 @@ public class ThumbnailService {
 
     private final static String THUMBNAIL_EXTENSION = "png";
 
-    private final static String PDF_EXTENSION = "pdf";
+    public String getThumbnailExtension() {
+        return THUMBNAIL_EXTENSION;
+    }
 
-    private final ConverterService converterService;
+    public String createBase64Thumbnail(
+        @NonNull final String base64, @NonNull final String inputFormat, @NonNull Integer containerWidth, @NonNull Integer containerHeight, boolean container)
+        throws Exception {
+        return createBase64Thumbnail(IOUtils.fromBase64(base64), inputFormat, containerWidth, containerHeight, container);
+    }
 
-    /**
-     * Creates a PNG thumbnail of the given source
-     */
-    public byte[] createThumbnail(
+    public String createBase64Thumbnail(
         @NonNull final byte[] inputBytes, @NonNull final String inputFormat, @NonNull Integer containerWidth, @NonNull Integer containerHeight, boolean container)
         throws Exception {
-        if (!converterService.isSupported(inputFormat) || (converterService.isIncompatible(inputFormat, THUMBNAIL_EXTENSION)
-            && converterService.isIncompatible(inputFormat, PDF_EXTENSION))) {
-            throw new IllegalArgumentException("format not supported");
+        byte[] image = createThumbnail(inputBytes, inputFormat, containerWidth, containerHeight, container);
+        return IOUtils.toBase64(image);
+    }
+
+    /**
+     *
+     */
+    public byte[] createThumbnail(
+        @NonNull final byte[] imageOfInput, @NonNull final String inputFormat, @NonNull Integer containerWidth, @NonNull Integer containerHeight, boolean container)
+        throws Exception {
+        if (!isImageFormat(inputFormat)) {
+            throw new IllegalArgumentException("Input format is not an image");
         }
 
-        String processFormat;
-        byte[] processBytes;
-
-        if (!isImageFormat(inputFormat) && converterService.isIncompatible(inputFormat, THUMBNAIL_EXTENSION)) {
-            processBytes = converterService.convert(inputBytes, inputFormat, PDF_EXTENSION);
-            processFormat = PDF_EXTENSION;
-        } else {
-            processBytes = inputBytes;
-            processFormat = inputFormat;
-        }
-
-        // write temp file of image
-        byte[] imageOfInput = isImageFormat(inputFormat) ? processBytes : converterService.convert(processBytes, processFormat, THUMBNAIL_EXTENSION);
         InputStream imageOfInputStream = new ByteArrayInputStream(imageOfInput);
         BufferedImage inputImage = ImageIO.read(imageOfInputStream);
 
@@ -87,13 +88,13 @@ public class ThumbnailService {
         BufferedImage container = new BufferedImage(width, height, TYPE_INT_ARGB);
 
         Graphics2D drawer = container.createGraphics();
-
         drawer.setBackground(new Color(0, 0, 0, 1));
         drawer.dispose();
+
         return container;
     }
 
-    private boolean isImageFormat(String format) {
+    public boolean isImageFormat(String format) {
         return format != null && (format.equals("png") || format.equals("jpg") || format.equals("jpeg") || format.equals("gif") || format.equals("tiff") || format.equals("bmp"));
     }
 

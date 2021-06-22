@@ -1,17 +1,21 @@
 package com.encircle360.oss.docsrabbit.service;
 
-import static com.encircle360.oss.docsrabbit.util.IOUtils.*;
+import static com.encircle360.oss.docsrabbit.util.IOUtils.createRandomTmpFile;
+import static com.encircle360.oss.docsrabbit.util.IOUtils.deleteWithoutThrow;
+import static com.encircle360.oss.docsrabbit.util.IOUtils.fromBase64;
+import static com.encircle360.oss.docsrabbit.util.IOUtils.toBase64;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+
+import com.encircle360.oss.docsrabbit.util.IOUtils;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ConverterService {
 
-    private final Base64.Decoder decoder = Base64.getDecoder();
-    private final Base64.Encoder encoder = Base64.getEncoder();
+    private final static String PDF_EXTENSION = "pdf";
+    private final static String PNG_EXTENSION = "png";
 
     private final List<String> TEXT_OUTPUT = List.of(
         "bib", "xml", "html", "ltx", "doc", "odt", "txt", "pdf", "rtf", "sdw"
@@ -60,17 +64,41 @@ public class ConverterService {
     }
 
     public String convertToBase64(String base64, String inputFormat, String outputFormat) throws Exception {
-        byte[] converted = convert(decoder.decode(base64), inputFormat, outputFormat);
-        return encoder.encodeToString(converted);
+        byte[] converted = convert(fromBase64(base64), inputFormat, outputFormat);
+        return toBase64(converted);
     }
 
     public String convertToBase64(byte[] inputBytes, String inputFormat, String outputFormat) throws Exception {
         byte[] converted = convert(inputBytes, inputFormat, outputFormat);
-        return encoder.encodeToString(converted);
+        return toBase64(converted);
     }
 
     public byte[] convert(String base64, String inputFormat, String outputFormat) throws Exception {
-        return convert(decoder.decode(base64), inputFormat, outputFormat);
+        return convert(fromBase64(base64), inputFormat, outputFormat);
+    }
+
+    public byte[] convertToPng(String base64, String inputFormat) throws Exception {
+        return convertToPng(IOUtils.fromBase64(base64), inputFormat);
+    }
+
+    public byte[] convertToPng(byte[] bytes, String inputFormat) throws Exception {
+        String processFormat;
+        byte[] processBytes;
+
+        if (isIncompatible(inputFormat, PDF_EXTENSION) && isIncompatible(inputFormat, PNG_EXTENSION)) {
+            throw new IllegalArgumentException("Input format is not compatible");
+        }
+
+        if (isIncompatible(inputFormat, PNG_EXTENSION)) {
+            processBytes = convert(bytes, inputFormat, PDF_EXTENSION);
+            processFormat = PDF_EXTENSION;
+        } else {
+            processBytes = bytes;
+            processFormat = inputFormat;
+        }
+
+        // write temp file of image
+        return convert(processBytes, processFormat, PNG_EXTENSION);
     }
 
     /**

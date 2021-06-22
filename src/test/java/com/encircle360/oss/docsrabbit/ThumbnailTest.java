@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 
+import com.encircle360.oss.docsrabbit.service.ConverterService;
 import com.encircle360.oss.docsrabbit.service.ThumbnailService;
 
 @Disabled
@@ -18,15 +19,19 @@ public class ThumbnailTest extends AbstractTest {
     @Autowired
     ThumbnailService thumbnailService;
 
+    @Autowired
+    ConverterService converterService;
+
     @Test
     public void test_thumbnail_creation_docx() throws Exception {
         ClassPathResource testResource = new ClassPathResource("convert/test.docx");
         byte[] source = testResource.getInputStream().readAllBytes();
+        byte[] png = converterService.convertToPng(source, "docx");
 
-        byte[] thumbnail = thumbnailService.createThumbnail(source, "docx", 500, 500, true);
+        byte[] thumbnail = thumbnailService.createThumbnail(png, "png", 500, 500, true);
         Files.write(Path.of("temp/test_thumbail_container.png"), thumbnail);
 
-        thumbnail = thumbnailService.createThumbnail(source, "docx", 500, 500, false);
+        thumbnail = thumbnailService.createThumbnail(png, "png", 500, 500, false);
         Files.write(Path.of("temp/test_thumbail.png"), thumbnail);
     }
 
