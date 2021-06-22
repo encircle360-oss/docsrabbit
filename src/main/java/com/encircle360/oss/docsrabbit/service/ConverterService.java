@@ -96,12 +96,11 @@ public class ConverterService {
         // read process results, to see if everything is executed
         String line;
         StringBuilder result = new StringBuilder();
-        InputStreamReader isr = new InputStreamReader(process.getInputStream());
+        InputStreamReader streamReader = new InputStreamReader(process.getInputStream());
+        BufferedReader input = new BufferedReader(streamReader);
 
-        try (BufferedReader input = new BufferedReader(isr)) {
-            while ((line = input.readLine()) != null) {
-                result.append(line);
-            }
+        while ((line = input.readLine()) != null) {
+            result.append(line);
         }
 
         String logResult = result.toString();
@@ -122,7 +121,8 @@ public class ConverterService {
     }
 
     private Path createRandomTmpFile(String fileExtension) throws IOException {
-        return Files.createFile(Path.of("/tmp/" + UUID.randomUUID().toString() + "." + fileExtension));
+        Path path = Path.of("/tmp/" + UUID.randomUUID().toString() + "." + fileExtension);
+        return Files.createFile(path);
     }
 
     private void deleteWithoutThrow(Path file) {
@@ -138,7 +138,7 @@ public class ConverterService {
     }
 
     public boolean isIncompatible(String inputFormat, String outputFormat) {
-        return ACCEPTABLE_INPUT_OUTPUT.get(inputFormat) == null || !ACCEPTABLE_INPUT_OUTPUT.get(inputFormat).contains(outputFormat);
+        return !isSupported(inputFormat) || !ACCEPTABLE_INPUT_OUTPUT.get(inputFormat).contains(outputFormat);
     }
 }
 
