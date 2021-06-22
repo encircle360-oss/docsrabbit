@@ -80,7 +80,7 @@ public class ConverterService {
             throw new IllegalArgumentException("None of the arguments should be null");
         }
 
-        if (!isCompatible(inputFormat, outputFormat)) {
+        if (isIncompatible(inputFormat, outputFormat)) {
             throw new IllegalArgumentException("Types are not compatible to convert");
         }
 
@@ -133,8 +133,12 @@ public class ConverterService {
         }
     }
 
-    private boolean isCompatible(String inputFormat, String outputFormat) {
-        return ACCEPTABLE_INPUT_OUTPUT.get(inputFormat) != null && ACCEPTABLE_INPUT_OUTPUT.get(inputFormat).contains(outputFormat);
+    public boolean isSupported(String inputFormat) {
+        return ACCEPTABLE_INPUT_OUTPUT.get(inputFormat) != null;
+    }
+
+    public boolean isIncompatible(String inputFormat, String outputFormat) {
+        return ACCEPTABLE_INPUT_OUTPUT.get(inputFormat) == null || !ACCEPTABLE_INPUT_OUTPUT.get(inputFormat).contains(outputFormat);
     }
 }
 
