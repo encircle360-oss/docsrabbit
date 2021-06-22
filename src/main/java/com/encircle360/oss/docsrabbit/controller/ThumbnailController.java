@@ -41,25 +41,25 @@ public class ThumbnailController {
 
         String result;
         try {
-            byte[] pngImage;
-            if (thumbnailService.isImageFormat(request.getFormat())) {
-                pngImage = IOUtils.fromBase64(request.getBase64());
-            } else {
-                pngImage = converterService.convertToPng(request.getBase64(), request.getFormat());
+            byte[] pngImage = IOUtils.fromBase64(request.getBase64());
+            String imageFormat = !thumbnailService.isImageFormat(request.getFormat()) ? "png" : request.getFormat();
+
+            if (!thumbnailService.isImageFormat(request.getFormat())) {
+                pngImage = converterService.convertToPng(pngImage, request.getFormat());
             }
 
-            result = thumbnailService.createBase64Thumbnail(pngImage, request.getFormat(), request.getWidth(), request.getHeight(), request.isContainer());
+            result = thumbnailService.createBase64Thumbnail(pngImage, imageFormat, request.getWidth(), request.getHeight(), request.isContainer());
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        ThumbnailResultDTO thumbnailResultDTO = ThumbnailResultDTO
+        ThumbnailResultDTO resultDTO = ThumbnailResultDTO
             .builder()
             .base64(result)
             .format(thumbnailService.getThumbnailExtension())
             .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(thumbnailResultDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
 }

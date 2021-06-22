@@ -1,16 +1,23 @@
 package com.encircle360.oss.docsrabbit;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.test.web.servlet.MvcResult;
 
+import com.encircle360.oss.docsrabbit.dto.thumbnail.ThumbnailRequestDTO;
+import com.encircle360.oss.docsrabbit.dto.thumbnail.ThumbnailResultDTO;
 import com.encircle360.oss.docsrabbit.service.ConverterService;
 import com.encircle360.oss.docsrabbit.service.ThumbnailService;
+import com.encircle360.oss.docsrabbit.util.IOUtils;
 
 @Disabled
 @SpringBootTest
@@ -69,5 +76,43 @@ public class ThumbnailTest extends AbstractTest {
 
         thumbnail = thumbnailService.createThumbnail(source, "jpg", 500, 400, false);
         Files.write(Path.of("temp/test_scale_500_sunset_thumbail.png"), thumbnail);
+    }
+
+    @Test
+    public void test_endpoint() throws Exception {
+        ThumbnailRequestDTO thumbnailRequestDTO = ThumbnailRequestDTO.builder().build();
+        post("/thumbnails", thumbnailRequestDTO, status().isBadRequest());
+
+        thumbnailRequestDTO = ThumbnailRequestDTO
+            .builder()
+            .format("txt")
+            .base64("dGVzdA==")
+            .build();
+
+        MvcResult result = post("/thumbnails", thumbnailRequestDTO, status().isOk());
+        ThumbnailResultDTO resultDTO = resultToObject(result, ThumbnailResultDTO.class);
+
+        Assertions.assertEquals(thumbnailService.getThumbnailExtension(), resultDTO.getFormat());
+        Assertions.assertNotNull(resultDTO.getBase64());
+
+        Files.write(Path.of("temp/api_test_thumbnail.png"), IOUtils.fromBase64(resultDTO.getBase64()));
+
+        ClassPathResource testResource = new ClassPathResource("thumbnail/sunset.jpg");
+        byte[] source = testResource.getInputStream().readAllBytes();
+
+        thumbnailRequestDTO = ThumbnailRequestDTO
+            .builder()
+            .format("jpg")
+            .base64(IOUtils.toBase64(source))
+            .build();
+
+        result = post("/thumbnails", thumbnailRequestDTO, status().isOk());
+        resultDTO = resultToObject(result, ThumbnailResultDTO.class);
+
+        Assertions.assertEquals(thumbnailService.getThumbnailExtension(), resultDTO.getFormat());
+        Assertions.assertNotNull(resultDTO.getBase64());
+
+        Files.write(Path.of("temp/api_test_sunset_thumbnail.png"), IOUtils.fromBase64(resultDTO.getBase64()));
+
     }
 }
