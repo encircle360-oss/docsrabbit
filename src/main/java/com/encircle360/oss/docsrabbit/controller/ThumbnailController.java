@@ -2,6 +2,7 @@ package com.encircle360.oss.docsrabbit.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import com.encircle360.oss.docsrabbit.service.ConverterService;
 import com.encircle360.oss.docsrabbit.service.ThumbnailService;
 import com.encircle360.oss.docsrabbit.util.IOUtils;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +33,16 @@ public class ThumbnailController {
     private final ThumbnailService thumbnailService;
     private final ConverterService converterService;
 
+    @Operation(
+        operationId = "createThumbnail",
+        description = "Creates a thumbnail by base64 input and the given format from request",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Thumbnail was generated successfully."),
+            @ApiResponse(responseCode = "400", description = "The request body was not correct."),
+            @ApiResponse(responseCode = "412", description = "The given format is not convertable."),
+            @ApiResponse(responseCode = "500", description = "Some server error has happened, see logs for further details.")
+        }
+    )
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ThumbnailResultDTO> create(@RequestBody @Valid final ThumbnailRequestDTO request) {
 
