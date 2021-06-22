@@ -18,7 +18,9 @@ import com.encircle360.oss.docsrabbit.service.ConverterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -39,9 +41,9 @@ public class ConverterController {
         }
     )
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ConverterResultDTO> convert(@RequestBody @Valid ConverterRequestDTO converterRequest) {
+    public ResponseEntity<ConverterResultDTO> convert(@RequestBody @Valid final ConverterRequestDTO converterRequest) {
 
-        if(!converterService.isSupported(converterRequest.getInputFormat())) {
+        if (!converterService.isSupported(converterRequest.getInputFormat())) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
@@ -53,6 +55,7 @@ public class ConverterController {
         try {
             base64 = converterService.convertToBase64(converterRequest.getBase64(), converterRequest.getInputFormat(), converterRequest.getOutputFormat());
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
