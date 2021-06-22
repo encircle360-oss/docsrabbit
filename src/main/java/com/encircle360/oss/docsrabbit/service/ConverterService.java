@@ -55,6 +55,8 @@ public class ConverterService {
         ACCEPTABLE_INPUT_OUTPUT.put("tiff", GRAPHIC_OUTPUT);
         ACCEPTABLE_INPUT_OUTPUT.put("bmp", GRAPHIC_OUTPUT);
         ACCEPTABLE_INPUT_OUTPUT.put("pdf", GRAPHIC_OUTPUT);
+        ACCEPTABLE_INPUT_OUTPUT.put("csv", TABLE_OUTPUT);
+        ACCEPTABLE_INPUT_OUTPUT.put("xls", TABLE_OUTPUT);
     }
 
     public String convertToBase64(String base64, String inputFormat, String outputFormat) throws Exception {
