@@ -18,7 +18,7 @@ import com.encircle360.oss.docsrabbit.dto.convert.ConverterRequestDTO;
 import com.encircle360.oss.docsrabbit.dto.convert.ConverterResultDTO;
 import com.encircle360.oss.docsrabbit.service.ConverterService;
 
-@Disabled
+//@Disabled
 @SpringBootTest
 public class ConverterTest extends AbstractTest {
 

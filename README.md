@@ -6,7 +6,7 @@
 
 ## DocsRabbit - Render templates | Scan document
 
-##### Render templates the way you want. Scan documents of many standard file types.
+##### Render templates the way you want. Scan documents of many standard file types. Convert a document easily and create a thumbnail the way you want it.
 
 ### Getting started
 
@@ -29,23 +29,38 @@ docker run -p 50005:50005 -p 51005:51005 \
 
 ### Features of docsrabbit
 
-Rendering: 
+Rendering:
+
 * Using templates from filesystem
 * Using templates out of mongodb (activate mongo profile)
-* Internationalization 
+* Internationalization
 * Inline rendering (you can post the template directly to render)
 * Multiple rendering types: PDF, PLAIN, HTML
 * Base64 encoded transfer of data
-  
-OCR: 
-* Make OCR scans direct from single files like PDF, Word, Excel, etc. 
+
+OCR:
+
+* Make OCR scans direct from single files like PDF, Word, Excel, etc.
+
+Converting:
+
+* Convert documents from editable types to PDF
+* Convert first page of PDF's to image
+* Base64 encoded transfer of data
+
+Thumbnailing:
+
+* Creates thumbnails from images
+* Creates thumbails from multiple document types
+* Base64 encoded transfer of data
 
 For all available endpoints visit the OpenAPI specs:
 
 `http://localhost:50005/swagger-ui/index.html?url=http://localhost:50005/v3/api-docs#/`
 
 ### Example REST call for rendering a template
-Let's render the default template from scratch 
+
+Let's render the default template from scratch
 
 ```shell
 curl --location --request POST 'http://localhost:50005/render' \
@@ -75,7 +90,7 @@ curl --location --request POST 'http://localhost:50005/render' \
 }'
 ```
 
-### Example REST call for a OCR scan from a file 
+### Example REST call for a OCR scan from a file
 
 ```shell
 curl -X 'POST' \
@@ -87,35 +102,37 @@ curl -X 'POST' \
 
 ### Example Dockerfile
 
-Since docsrabbit will lookup for templates in `/resources/templates/` and i18n files in `/resources/i18n/` you can use the following Dockerfile as example to create your own docker image with your own templates and i18n.
-You can find examples how [templates](src/main/resources/templates) or [i18n files](src/main/resources/i18n) look like [here](src/main/resources).
+Since docsrabbit will lookup for templates in `/resources/templates/` and i18n files in `/resources/i18n/` you can use the following Dockerfile as example to create your own docker
+image with your own templates and i18n. You can find examples how [templates](src/main/resources/templates) or [i18n files](src/main/resources/i18n) look
+like [here](src/main/resources).
+
 ```dockerfile
 FROM registry.gitlab.com/encircle360-oss/docsrabbit/docsrabbit:latest
 ADD templates /resources/templates # add your template directory containing *.ftlh templates here
 ADD i18n /resources/i18n # add your i18n directory containing messages.properties files here
 ```
 
-If you're done with this you can build your own image using docker-cli `docker build .` or let your build pipeline do that.
-E.g. we suggest to use gitlab-ci to always have your own customized docsrabbit docker image.
+If you're done with this you can build your own image using docker-cli `docker build .` or let your build pipeline do that. E.g. we suggest to use gitlab-ci to always have your own
+customized docsrabbit docker image.
 
-After you've build your own docker image with your own templates you can use the REST api to render documents.
-The `templateId` field corresponds to the template filename. If you've added a template called `invoice.ftlh` you have to use
+After you've build your own docker image with your own templates you can use the REST api to render documents. The `templateId` field corresponds to the template filename. If
+you've added a template called `invoice.ftlh` you have to use
 `"invoice"`
 within your API request payload.
 
 ### Service Health
 
-If you started with port exposing to localhost you can fetch `http://localhost:50006/actuator/health` to get health status of the service itself 
-
+If you started with port exposing to localhost you can fetch `http://localhost:50006/actuator/health` to get health status of the service itself
 
 ### Good to know
-Docsrabbit internally uses the [freemarker](https://freemarker.apache.org/) template engine which has the advantages that it's easy to copy and paste email html templates.
-This is really useful if you for example use email templates bought on themeforest. Since these templates can get updates you don't have to check each html dom element while importing a template update.
-Mostly you only have to focus on your content model variables and you're able to just copy the html from the update.
+
+Docsrabbit internally uses the [freemarker](https://freemarker.apache.org/) template engine which has the advantages that it's easy to copy and paste email html templates. This is
+really useful if you for example use email templates bought on themeforest. Since these templates can get updates you don't have to check each html dom element while importing a
+template update. Mostly you only have to focus on your content model variables and you're able to just copy the html from the update.
 
 Templates will be used for body and subject, too. So you can use i18n features also in your subject.
 
-So you have the [full feature support](https://freemarker.apache.org/docs/ref.html) of freemarker in your templates and also activated i18n support so that you can also put your resource bundles with messages.properties into your image and switch the locale for each email you're sending.
+So you have the [full feature support](https://freemarker.apache.org/docs/ref.html) of freemarker in your templates and also activated i18n support so that you can also put your
+resource bundles with messages.properties into your image and switch the locale for each email you're sending.
 
-This is open source software by [encircle360](https://encircle360.com).
-Use on your own risk and for personal use. If you need support or consultancy just contact us.
+This is open source software by [encircle360](https://encircle360.com). Use on your own risk and for personal use. If you need support or consultancy just contact us.
