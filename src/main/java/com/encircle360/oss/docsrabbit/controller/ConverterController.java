@@ -34,7 +34,7 @@ public class ConverterController {
         description = "Converts a file from input type to output type of converterRequest",
         responses = {
             @ApiResponse(responseCode = "200", description = "Converting was successfull result is returned."),
-            @ApiResponse(responseCode = "400", description = "The requestbody was not corret."),
+            @ApiResponse(responseCode = "400", description = "The request body was not correct."),
             @ApiResponse(responseCode = "406", description = "The given input type is not supported."),
             @ApiResponse(responseCode = "412", description = "The input type can't be converted to the given output type."),
             @ApiResponse(responseCode = "500", description = "Some processing error has happened.")
